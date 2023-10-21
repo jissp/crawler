@@ -6,7 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "start:naver-land-crawler:local": "dotenv -e ./apps/naver-land-crawler/env/.env nest start naver-land-crawler --watch"
+    "build:naver-land-crawler": "nest build ./apps/naver-land-crawler",
+    "start:naver-land-crawler:local": "dotenv -e ./apps/naver-land-crawler/env/.env nest start naver-land-crawler --watch",
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",

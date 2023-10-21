@@ -1,14 +1,13 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/crawler/src",
+  "sourceRoot": "apps/naver-land-crawler/src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "webpack": true,
-    "tsConfigPath": "apps/crawler/tsconfig.app.json"
+    "tsConfigPath": "apps/naver-land-crawler/tsconfig.app.json"
   },
   "monorepo": true,
-  "root": "apps/crawler",
+  "root": "apps/naver-land-crawler",
   "projects": {
     "naver-land-crawler": {
       "type": "application",

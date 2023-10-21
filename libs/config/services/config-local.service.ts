@@ -1,6 +1,7 @@
 import { IConfig } from "../interfaces/config.interface";
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import * as process from "process";
 
 export class ConfigLocalService implements IConfig {
     async getDatabaseConfig(): Promise<TypeOrmModuleOptions> {
