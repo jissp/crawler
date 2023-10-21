@@ -10,15 +10,6 @@
   "monorepo": true,
   "root": "apps/crawler",
   "projects": {
-    "crawler": {
-      "type": "application",
-      "root": "apps/crawler",
-      "entryFile": "main",
-      "sourceRoot": "apps/crawler/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/crawler/tsconfig.app.json"
-      }
-    },
     "naver-land-crawler": {
       "type": "application",
       "root": "apps/naver-land-crawler",
