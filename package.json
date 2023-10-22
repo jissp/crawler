@@ -10,10 +10,12 @@
     "start:naver-land-crawler:local": "dotenv -e ./apps/naver-land-crawler/env/.env nest start naver-land-crawler --watch"
   },
   "dependencies": {
+    "@nestjs/axios": "^3.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/typeorm": "^10.0.0",
+    "axios": "^1.5.1",
     "dotenv-cli": "^7.3.0",
     "mysql2": "^3.6.2",
     "reflect-metadata": "^0.1.13",
