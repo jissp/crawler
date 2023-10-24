@@ -23,5 +23,10 @@ export function loadDatabaseContainer({
             MYSQL_PASSWORD: password,
             MYSQL_ROOT_PASSWORD: 'root',
             MYSQL_ALLOW_EMPTY_PASSWORD: 'yes',
-        });
+        })
+        .withCommand([
+            '--character-set-server=utf8mb4',
+            '--collation-server=utf8mb4_unicode_ci',
+            '--skip-character-set-client-handshake',
+        ]);
 }

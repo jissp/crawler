@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { NaverLandCrawlerModule } from '@libs/crawler/naver-land-crawler/naver-land-crawler.module';
-import { CrawlerService } from '@libs/crawler/services/crawler.service';
+import { ArticleService } from '@libs/crawler/services/article.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Crawling } from '@libs/crawler/schemas/crawling.schema';
+import { Article } from '@libs/crawler/schemas/article.schema';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Crawling]), NaverLandCrawlerModule],
-    providers: [CrawlerService],
-    exports: [CrawlerService],
+    imports: [TypeOrmModule.forFeature([Article]), NaverLandCrawlerModule],
+    providers: [ArticleService],
+    exports: [ArticleService],
 })
 export class CrawlerModule {}

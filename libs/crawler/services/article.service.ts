@@ -1,18 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Crawling } from '@libs/crawler/schemas/crawling.schema';
+import { Article } from '@libs/crawler/schemas/article.schema';
 import { Repository } from 'typeorm';
 import { CrawlerType } from '@libs/crawler/interfaces/crawler.interface';
 
 @Injectable()
-export class CrawlerService {
+export class ArticleService {
     constructor(
-        @InjectRepository(Crawling)
-        private readonly crawlingRepository: Repository<Crawling>,
+        @InjectRepository(Article)
+        private readonly articleRepository: Repository<Article>,
     ) {}
 
     async findOneById(id: number) {
-        return this.crawlingRepository.findOne({
+        return this.articleRepository.findOne({
             where: {
                 id,
             },
@@ -20,7 +20,7 @@ export class CrawlerService {
     }
 
     async findOneByNo(type: CrawlerType, no: string) {
-        return this.crawlingRepository.findOne({
+        return this.articleRepository.findOne({
             where: {
                 type,
                 no,
@@ -29,12 +29,12 @@ export class CrawlerService {
     }
 
     async findManyByType(type: CrawlerType) {
-        return this.crawlingRepository.findBy({
+        return this.articleRepository.findBy({
             type,
         });
     }
 
-    async save(data: Partial<Crawling>) {
-        return this.crawlingRepository.save(data);
+    async save(data: Partial<Article>) {
+        return this.articleRepository.save(data);
     }
 }

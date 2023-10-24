@@ -1,18 +1,20 @@
 import { Test } from '@nestjs/testing';
 import { baseNaverLandRequestDto } from '@libs/naver-land-client/tests/test.util';
 import { NaverLandCrawler } from '@libs/crawler/naver-land-crawler/naver-land.crawler';
+import { NaverLandArticleService } from '../app/services/naver-land-article.service';
 import { StartedTestContainer } from 'testcontainers';
 import { loadDatabaseContainer } from '@libs/utils/test/load-database-container';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { Article } from '@libs/crawler/schemas/article.schema';
+import { NaverLandArticle } from '@libs/crawler/naver-land-crawler/schemas/naver-land-article.schema';
 import { CrawlerModule } from '@libs/crawler/crawler.module';
-import { ArticleService } from '@libs/crawler/services/article.service';
-import { CrawlerType } from '@libs/crawler/interfaces/crawler.interface';
 
-describe('Crawler Save Test', () => {
+describe('NaverLandCrawler', () => {
     let databaseContainer: StartedTestContainer;
+
     let naverLandCrawler: NaverLandCrawler;
-    let articleService: ArticleService;
+    let naverLandArticleService: NaverLandArticleService;
 
     beforeAll(async () => {
         const dbConfig = {
@@ -36,20 +38,25 @@ describe('Crawler Save Test', () => {
                     autoLoadEntities: true,
                     namingStrategy: new SnakeNamingStrategy(),
                 }),
+                TypeOrmModule.forFeature([Article, NaverLandArticle]),
                 CrawlerModule,
             ],
+            providers: [NaverLandArticleService],
+            exports: [NaverLandArticleService],
         }).compile();
 
         naverLandCrawler = moduleRef.get<NaverLandCrawler>(NaverLandCrawler);
-        articleService = moduleRef.get<ArticleService>(ArticleService);
+        naverLandArticleService = moduleRef.get<NaverLandArticleService>(
+            NaverLandArticleService,
+        );
     });
 
     afterAll(async () => {
         await databaseContainer.stop();
     });
 
-    it('run', async () => {
-        const oriArticles = await naverLandCrawler.run(
+    it('naverLandArticle Save 테스트', async () => {
+        const articles = await naverLandCrawler.run(
             baseNaverLandRequestDto({
                 z: 13,
                 lat: 37.5030847,
@@ -61,26 +68,23 @@ describe('Crawler Save Test', () => {
             }),
         );
 
-        // 저장 테스트
-        const results = await Promise.allSettled(
-            oriArticles.map((oriArticle) => {
-                return articleService.save({
-                    type: CrawlerType.NAVER_LAND,
-                    no: oriArticle.atclNo,
-                    data: oriArticle,
-                });
+        const naverLandArticles = articles.map((article) => {
+            return naverLandCrawler.transform(article);
+        });
+
+        const response = await Promise.allSettled(
+            naverLandArticles.map((naverLandArticle) => {
+                return naverLandArticleService.save(naverLandArticle);
             }),
         );
 
-        expect(
-            results.filter((result) => result.status === 'fulfilled').length,
-        ).toBeGreaterThan(0);
-
-        // 데이터 조회 후 테스트
-        const articles = await articleService.findManyByType(
-            CrawlerType.NAVER_LAND,
+        const fulfilledResponse = response.filter(
+            (res) => res.status === 'fulfilled',
         );
 
-        expect(articles.length).toBeGreaterThan(0);
+        expect(fulfilledResponse.length).toBeGreaterThan(0);
+
+        const savedNaverLandArticles = await naverLandArticleService.findAll();
+        expect(savedNaverLandArticles.length).toBe(fulfilledResponse.length);
     });
 });
