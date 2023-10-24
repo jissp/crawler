@@ -8,9 +8,9 @@ import {
 import { CrawlerType } from '@libs/crawler/interfaces/crawler.interface';
 
 @Entity({
-    name: 'crawlings',
+    name: 'articles',
 })
-export class Crawling {
+export class Article {
     @PrimaryGeneratedColumn()
     id: number;
 
