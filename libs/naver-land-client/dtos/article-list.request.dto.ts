@@ -36,6 +36,7 @@ export class ArticleListRequestDto {
     @ApiProperty({
         type: Number,
         title: '위도',
+        default: 37.5030847,
     })
     @IsNumber()
     lat: number;
@@ -43,6 +44,7 @@ export class ArticleListRequestDto {
     @ApiProperty({
         type: Number,
         title: '경도',
+        default: 126.996848,
     })
     @IsNumber()
     lon: number;
@@ -50,6 +52,7 @@ export class ArticleListRequestDto {
     @ApiProperty({
         type: Number,
         title: '',
+        default: 37.4390515,
     })
     @IsNumber()
     btm: number;
@@ -57,6 +60,7 @@ export class ArticleListRequestDto {
     @ApiProperty({
         type: Number,
         title: '',
+        default: 126.832053,
     })
     @IsNumber()
     lft: number;
@@ -64,6 +68,7 @@ export class ArticleListRequestDto {
     @ApiProperty({
         type: Number,
         title: '',
+        default: 37.567063,
     })
     @IsNumber()
     top: number;
@@ -71,6 +76,7 @@ export class ArticleListRequestDto {
     @ApiProperty({
         type: Number,
         title: '',
+        default: 127.1616429,
     })
     @IsNumber()
     rgt: number;
@@ -78,6 +84,7 @@ export class ArticleListRequestDto {
     @ApiProperty({
         type: Number,
         title: '매매가(최소)',
+        default: 10000,
     })
     @IsNumber()
     dprcMin?: number;
@@ -85,6 +92,7 @@ export class ArticleListRequestDto {
     @ApiProperty({
         type: Number,
         title: '매매가(최대)',
+        default: 38000,
     })
     @IsNumber()
     dprcMax?: number;
@@ -92,6 +100,7 @@ export class ArticleListRequestDto {
     @ApiProperty({
         type: Number,
         title: '공급면적(최소)',
+        default: 45,
     })
     @IsNumber()
     spcMin?: number;
@@ -99,6 +108,7 @@ export class ArticleListRequestDto {
     @ApiProperty({
         type: Number,
         title: '공급면적(최대)',
+        default: 9999,
     })
     @IsNumber()
     spcMax?: number;
@@ -114,6 +124,7 @@ export class ArticleListRequestDto {
     @ApiProperty({
         type: Number,
         title: '페이지 번호',
+        default: 1,
     })
     @IsNumber()
     page: number;
@@ -121,6 +132,7 @@ export class ArticleListRequestDto {
     @ApiProperty({
         type: Number,
         title: '검색 최대 페이지 번호',
+        default: 1,
     })
     @IsNumber()
     maxPage?: number;

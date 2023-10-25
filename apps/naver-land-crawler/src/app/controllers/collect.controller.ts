@@ -1,4 +1,4 @@
-import { Body, Controller, Inject, Post } from "@nestjs/common";
+import { Body, Controller, Post } from '@nestjs/common';
 import { ArticleListRequestDto } from '@libs/naver-land-client/dtos/article-list.request.dto';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { NaverLandCrawler } from '@libs/naver-land-crawler/naver-land.crawler';
