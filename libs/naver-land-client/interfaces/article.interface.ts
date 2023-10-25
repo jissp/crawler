@@ -1,6 +1,6 @@
 import { TradeType } from '@libs/naver-land-client/interfaces/naver-land.interface';
 
-export interface IArticleList {
+export interface IArticleResponse {
     code: string;
     paidPreSale: IPaidPreSale;
     hasPaidPreSale: boolean;

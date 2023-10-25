@@ -10,7 +10,8 @@ import {
     IArticle,
     RealEstateTypeName,
 } from '@libs/naver-land-client/interfaces/article.interface';
-import { NaverLandArticle } from '@libs/crawler/naver-land-crawler/schemas/naver-land-article.schema';
+import { INaverLandArticle } from '@libs/naver-land-crawler/interfaces/naver-land-article.interface';
+import { uSleep } from '@libs/utils/usleep.util';
 
 @Injectable()
 export class NaverLandCrawler extends CrawlerAbstract<CrawlerType.NAVER_LAND> {
@@ -19,16 +20,28 @@ export class NaverLandCrawler extends CrawlerAbstract<CrawlerType.NAVER_LAND> {
     }
 
     async run(dto: CrawlerDto<CrawlerType.NAVER_LAND>): Promise<IArticle[]> {
-        const articles = await this.client.getArticleList(dto);
+        let page = dto.page ?? 1;
+        const maxPage = dto.maxPage ?? 99;
 
-        return articles.body.map((article) => {
-            return article;
-        });
+        const articles: IArticle[] = [];
+        while (true) {
+            const articleResponse = await this.client.getArticleList(dto);
+
+            articles.push(...articleResponse.body);
+
+            if (page++ >= maxPage) {
+                break;
+            }
+
+            await uSleep(3000);
+        }
+
+        return articles;
     }
 
     transform(
         data: CrawlerParseResponse<CrawlerType.NAVER_LAND>,
-    ): Partial<NaverLandArticle> {
+    ): Partial<INaverLandArticle> {
         return {
             id: null,
             articleNo: data.atclNo,

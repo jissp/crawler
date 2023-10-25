@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { NaverLandArticle } from '@libs/crawler/naver-land-crawler/schemas/naver-land-article.schema';
+import { NaverLandArticle } from '../schemas/naver-land-article.schema';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 

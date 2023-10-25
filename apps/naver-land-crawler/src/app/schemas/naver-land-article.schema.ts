@@ -10,11 +10,12 @@ import {
     RealEstateTypeName,
 } from '@libs/naver-land-client/interfaces/article.interface';
 import { TradeType } from '@libs/naver-land-client/interfaces/naver-land.interface';
+import { INaverLandArticle } from "@libs/naver-land-crawler/interfaces/naver-land-article.interface";
 
 @Entity({
     name: 'naver_land_articles',
 })
-export class NaverLandArticle {
+export class NaverLandArticle implements INaverLandArticle {
     @PrimaryGeneratedColumn()
     id: number;
 

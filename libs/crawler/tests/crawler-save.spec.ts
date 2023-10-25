@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { baseNaverLandRequestDto } from '@libs/naver-land-client/tests/test.util';
-import { NaverLandCrawler } from '@libs/crawler/naver-land-crawler/naver-land.crawler';
+import { NaverLandCrawler } from '@libs/naver-land-crawler/naver-land.crawler';
 import { StartedTestContainer } from 'testcontainers';
 import { loadDatabaseContainer } from '@libs/utils/test/load-database-container';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -8,6 +8,7 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { CrawlerModule } from '@libs/crawler/crawler.module';
 import { ArticleService } from '@libs/crawler/services/article.service';
 import { CrawlerType } from '@libs/crawler/interfaces/crawler.interface';
+import { NaverLandCrawlerModule } from '@libs/naver-land-crawler/naver-land-crawler.module';
 
 describe('Crawler Save Test', () => {
     let databaseContainer: StartedTestContainer;
@@ -37,6 +38,7 @@ describe('Crawler Save Test', () => {
                     namingStrategy: new SnakeNamingStrategy(),
                 }),
                 CrawlerModule,
+                NaverLandCrawlerModule,
             ],
         }).compile();
 
@@ -58,6 +60,8 @@ describe('Crawler Save Test', () => {
                 lft: 126.832053,
                 top: 37.567063,
                 rgt: 127.1616429,
+                page: 1,
+                maxPage: 1,
             }),
         );
 

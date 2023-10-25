@@ -1,14 +1,15 @@
 import { Test } from '@nestjs/testing';
 import { baseNaverLandRequestDto } from '@libs/naver-land-client/tests/test.util';
-import { NaverLandCrawler } from '@libs/crawler/naver-land-crawler/naver-land.crawler';
+import { NaverLandCrawler } from '@libs/naver-land-crawler/naver-land.crawler';
 import { NaverLandArticleService } from '../app/services/naver-land-article.service';
 import { StartedTestContainer } from 'testcontainers';
 import { loadDatabaseContainer } from '@libs/utils/test/load-database-container';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { Article } from '@libs/crawler/schemas/article.schema';
-import { NaverLandArticle } from '@libs/crawler/naver-land-crawler/schemas/naver-land-article.schema';
+import { NaverLandArticle } from '../app/schemas/naver-land-article.schema';
 import { CrawlerModule } from '@libs/crawler/crawler.module';
+import { NaverLandCrawlerModule } from '@libs/naver-land-crawler/naver-land-crawler.module';
 
 describe('NaverLandCrawler', () => {
     let databaseContainer: StartedTestContainer;
@@ -40,6 +41,7 @@ describe('NaverLandCrawler', () => {
                 }),
                 TypeOrmModule.forFeature([Article, NaverLandArticle]),
                 CrawlerModule,
+                NaverLandCrawlerModule,
             ],
             providers: [NaverLandArticleService],
             exports: [NaverLandArticleService],
@@ -65,6 +67,8 @@ describe('NaverLandCrawler', () => {
                 lft: 126.832053,
                 top: 37.567063,
                 rgt: 127.1616429,
+                page: 1,
+                maxPage: 1,
             }),
         );
 

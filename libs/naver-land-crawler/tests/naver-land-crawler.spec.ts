@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { baseNaverLandRequestDto } from '@libs/naver-land-client/tests/test.util';
-import { NaverLandCrawler } from '@libs/crawler/naver-land-crawler/naver-land.crawler';
-import { NaverLandCrawlerModule } from '@libs/crawler/naver-land-crawler/naver-land-crawler.module';
+import { NaverLandCrawler } from '@libs/naver-land-crawler/naver-land.crawler';
+import { NaverLandCrawlerModule } from '@libs/naver-land-crawler/naver-land-crawler.module';
 
 describe('NaverLandCrawler', () => {
     let naverLandCrawler: NaverLandCrawler;
@@ -24,6 +24,8 @@ describe('NaverLandCrawler', () => {
                 lft: 126.832053,
                 top: 37.567063,
                 rgt: 127.1616429,
+                page: 1,
+                maxPage: 1,
             }),
         );
 
@@ -40,6 +42,8 @@ describe('NaverLandCrawler', () => {
                 lft: 126.832053,
                 top: 37.567063,
                 rgt: 127.1616429,
+                page: 1,
+                maxPage: 1,
             }),
         );
 
