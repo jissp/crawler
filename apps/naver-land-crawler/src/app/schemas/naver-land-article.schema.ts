@@ -45,9 +45,8 @@ export class NaverLandArticle implements INaverLandArticleSchema {
     // flrInfo;
 
     @Column({
-        type: 'decimal',
-        precision: 8,
-        scale: 2,
+        type: 'integer',
+        unsigned: true,
     })
     price!: number;
 
@@ -64,6 +63,13 @@ export class NaverLandArticle implements INaverLandArticleSchema {
         scale: 2,
     })
     spc2!: number;
+
+    @Column({
+        type: 'decimal',
+        precision: 5,
+        scale: 2,
+    })
+    spcRatio: number;
 
     @Column({
         type: 'enum',
