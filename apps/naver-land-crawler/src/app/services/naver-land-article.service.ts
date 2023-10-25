@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { NaverLandArticle } from '../schemas/naver-land-article.schema';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { INaverLandArticleSchema } from '@libs/naver-land-crawler/interfaces/naver-land-article.schema.interface';
+import * as _ from 'lodash';
 
 @Injectable()
 export class NaverLandArticleService {
@@ -30,7 +32,13 @@ export class NaverLandArticleService {
         });
     }
 
-    async save(data: Partial<NaverLandArticle>) {
-        return this.naverLandArticleRepository.save(data);
+    async save(naverLandArticle: Partial<INaverLandArticleSchema>) {
+        let _naverLandArticle =
+            (await this.findOneByArticleNo(naverLandArticle.articleNo)) ??
+            new NaverLandArticle();
+
+        _naverLandArticle = _.merge(_naverLandArticle, naverLandArticle);
+
+        return this.naverLandArticleRepository.save(_naverLandArticle);
     }
 }

@@ -10,7 +10,7 @@ import {
     IArticle,
     RealEstateTypeName,
 } from '@libs/naver-land-client/interfaces/article.interface';
-import { INaverLandArticle } from '@libs/naver-land-crawler/interfaces/naver-land-article.interface';
+import { INaverLandArticleSchema } from '@libs/naver-land-crawler/interfaces/naver-land-article.schema.interface';
 import { uSleep } from '@libs/utils/usleep.util';
 
 @Injectable()
@@ -41,9 +41,8 @@ export class NaverLandCrawler extends CrawlerAbstract<CrawlerType.NAVER_LAND> {
 
     transform(
         data: CrawlerParseResponse<CrawlerType.NAVER_LAND>,
-    ): Partial<INaverLandArticle> {
+    ): Partial<INaverLandArticleSchema> {
         return {
-            id: null,
             articleNo: data.atclNo,
             atclNm: data.atclNm,
             rletTpNm: data.rletTpNm as RealEstateTypeName,

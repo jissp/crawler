@@ -10,12 +10,12 @@ import {
     RealEstateTypeName,
 } from '@libs/naver-land-client/interfaces/article.interface';
 import { TradeType } from '@libs/naver-land-client/interfaces/naver-land.interface';
-import { INaverLandArticle } from "@libs/naver-land-crawler/interfaces/naver-land-article.interface";
+import { INaverLandArticleSchema } from '@libs/naver-land-crawler/interfaces/naver-land-article.schema.interface';
 
 @Entity({
     name: 'naver_land_articles',
 })
-export class NaverLandArticle implements INaverLandArticle {
+export class NaverLandArticle implements INaverLandArticleSchema {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -98,5 +98,5 @@ export class NaverLandArticle implements INaverLandArticle {
         default: null,
         onUpdate: 'CURRENT_TIMESTAMP',
     })
-    updatedAt!: Date;
+    updatedAt!: Date | null;
 }

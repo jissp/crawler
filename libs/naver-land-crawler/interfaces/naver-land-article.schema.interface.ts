@@ -4,8 +4,7 @@ import {
 } from '@libs/naver-land-client/interfaces/article.interface';
 import { TradeType } from '@libs/naver-land-client/interfaces/naver-land.interface';
 
-export interface INaverLandArticle {
-    id: number;
+export interface INaverLandArticleSchema {
     articleNo: string;
     atclNm: string;
     rletTpNm: RealEstateTypeName;
@@ -18,6 +17,4 @@ export interface INaverLandArticle {
     lat: number;
     lng: number;
     // tagList: [];
-    createdAt: Date;
-    updatedAt: Date;
 }

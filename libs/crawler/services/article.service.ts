@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Article } from '@libs/crawler/schemas/article.schema';
 import { Repository } from 'typeorm';
 import { CrawlerType } from '@libs/crawler/interfaces/crawler.interface';
+import * as _ from 'lodash';
+import { IArticleSchema } from '@libs/crawler/interfaces/article.schema.interface';
 
 @Injectable()
 export class ArticleService {
@@ -34,7 +36,12 @@ export class ArticleService {
         });
     }
 
-    async save(data: Partial<Article>) {
-        return this.articleRepository.save(data);
+    async save(article: Partial<IArticleSchema>) {
+        let _article =
+            (await this.findOneByNo(article.type, article.no)) ?? new Article();
+
+        _article = _.merge(_article, article);
+
+        return this.articleRepository.save(_article);
     }
 }

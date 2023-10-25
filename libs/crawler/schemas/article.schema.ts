@@ -6,11 +6,12 @@ import {
     UpdateDateColumn,
 } from 'typeorm';
 import { CrawlerType } from '@libs/crawler/interfaces/crawler.interface';
+import { IArticleSchema } from '@libs/crawler/interfaces/article.schema.interface';
 
 @Entity({
     name: 'articles',
 })
-export class Article {
+export class Article implements IArticleSchema {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -43,5 +44,5 @@ export class Article {
         default: null,
         onUpdate: 'CURRENT_TIMESTAMP',
     })
-    updatedAt!: Date;
+    updatedAt!: Date | null;
 }
