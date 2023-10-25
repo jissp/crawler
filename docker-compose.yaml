@@ -2,11 +2,17 @@ version: '3.9'
 services:
   mysql:
     image: mysql:8.1.0
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --skip-character-set-client-handshake
     environment:
-      MYSQL_DATABASE: 'naver-land-crawler'
+      MYSQL_DATABASE: 'crawler'
       MYSQL_USER: 'crawler'
       MYSQL_PASSWORD: 'crawler'
       MYSQL_ROOT_PASSWORD: 'root'
+    volumes:
+      - ./docker/mysql/init/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "3306:3306"
     networks:

@@ -41,13 +41,13 @@ export enum RealEstateType {
 
 export enum TradeType {
     /** 매매 */
-    A1 = 'A1',
+    매매 = 'A1',
     /** 전세 */
-    B1 = 'B1',
+    전세 = 'B1',
     /** 단기임대 */
-    B2 = 'B2',
+    단기임대 = 'B2',
     /** 월세 */
-    B3 = 'B3',
+    월세 = 'B3',
 }
 
 export type Tag =

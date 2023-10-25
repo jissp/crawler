@@ -13,5 +13,5 @@ export abstract class CrawlerAbstract<T extends CrawlerType> {
 
     abstract run(dto: CrawlerDto<T>): Promise<any>;
 
-    abstract parse(data: CrawlerParseResponse<T>): any;
+    abstract transform(data: CrawlerParseResponse<T>): any;
 }

@@ -1,6 +1,6 @@
 import { TradeType } from '@libs/naver-land-client/interfaces/naver-land.interface';
 
-export interface IArticleList {
+export interface IArticleResponse {
     code: string;
     paidPreSale: IPaidPreSale;
     hasPaidPreSale: boolean;
@@ -83,6 +83,28 @@ export interface IArticle {
     dtlAddrYn: 'Y' | 'N';
     dtlAddr?: string;
     point: number;
+}
+
+export enum RealEstateTypeName {
+    '아파트' = '아파트',
+    '오피스텔' = '오피스텔',
+    '빌라' = '빌라',
+    '아파트분양권' = '아파트분양권',
+    '오피스텔분양권' = '오피스텔분양권',
+    '재건축' = '재건축',
+    '전원주택' = '전원주택',
+    '단독/다가구' = '단독/다가구',
+    '상가주택' = '상가주택',
+    '한옥주택' = '한옥주택',
+    '재개발' = '재개발',
+    '원룸' = '원룸',
+    '고시원' = '고시원',
+    '상가' = '상가',
+    '사무실' = '사무실',
+    '공장/창고' = '공장/창고',
+    '건물' = '건물',
+    '토지' = '토지',
+    '지식산업센터' = '지식산업센터',
 }
 
 export enum Direction {

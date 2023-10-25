@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import axios, { Axios } from 'axios';
 import { ArticleListRequestDto } from '@libs/naver-land-client/dtos/article-list.request.dto';
-import { IArticleList } from '@libs/naver-land-client/interfaces/article.interface';
+import { IArticleResponse } from '@libs/naver-land-client/interfaces/article.interface';
 
 @Injectable()
 export class NaverLandClient {
@@ -15,8 +15,8 @@ export class NaverLandClient {
 
     public async getArticleList(
         dto: ArticleListRequestDto,
-    ): Promise<IArticleList> {
-        const response = await this.client.get<IArticleList>(
+    ): Promise<IArticleResponse> {
+        const response = await this.client.get<IArticleResponse>(
             '/cluster/ajax/articleList',
             {
                 params: {
