@@ -25,7 +25,12 @@ export class NaverLandCrawler extends CrawlerAbstract<CrawlerType.NAVER_LAND> {
 
         const articles: IArticle[] = [];
         while (true) {
+            dto.page = page;
             const articleResponse = await this.client.getArticleList(dto);
+
+            if (articleResponse.body.length === 0) {
+                break;
+            }
 
             articles.push(...articleResponse.body);
 
