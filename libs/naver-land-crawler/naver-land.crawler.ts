@@ -10,8 +10,8 @@ import {
     IArticle,
     RealEstateTypeName,
 } from '@libs/naver-land-client/interfaces/article.interface';
-import { INaverLandArticleSchema } from '@libs/naver-land-crawler/interfaces/naver-land-article.schema.interface';
 import { uSleep } from '@libs/utils/usleep.util';
+import { INaverLandArticleSchema } from '@libs/naver-land-crawler/interfaces/naver-land-article.schema.interface';
 
 @Injectable()
 export class NaverLandCrawler extends CrawlerAbstract<CrawlerType.NAVER_LAND> {
@@ -50,6 +50,7 @@ export class NaverLandCrawler extends CrawlerAbstract<CrawlerType.NAVER_LAND> {
             price: data.prc,
             spc1: data.spc1,
             spc2: data.spc2,
+            spcRatio: (data.spc2 / data.spc1) * 100,
             direction: data.direction,
             lat: data.lat,
             lng: data.lng,

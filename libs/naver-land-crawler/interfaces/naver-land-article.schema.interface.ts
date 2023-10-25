@@ -13,6 +13,7 @@ export interface INaverLandArticleSchema {
     price: number;
     spc1: number;
     spc2: number;
+    spcRatio: number;
     direction: Direction;
     lat: number;
     lng: number;
