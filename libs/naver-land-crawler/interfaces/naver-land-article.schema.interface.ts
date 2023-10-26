@@ -9,7 +9,6 @@ export interface INaverLandArticleSchema {
     atclNm: string;
     rletTpNm: RealEstateTypeName;
     tradTpCd: TradeType;
-    // flrInfo;
     price: number;
     spc1: number;
     spc2: number;
@@ -21,5 +20,4 @@ export interface INaverLandArticleSchema {
     direction: Direction;
     lat: number;
     lng: number;
-    // tagList: [];
 }

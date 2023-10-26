@@ -42,7 +42,6 @@ export class NaverLandArticle implements INaverLandArticleSchema {
         enum: TradeType,
     })
     tradTpCd: TradeType;
-    // flrInfo;
 
     @Column({
         type: 'integer',
@@ -114,8 +113,6 @@ export class NaverLandArticle implements INaverLandArticleSchema {
         scale: 2,
     })
     lng!: number;
-
-    // tagList: [];
 
     @CreateDateColumn({
         type: 'timestamp',

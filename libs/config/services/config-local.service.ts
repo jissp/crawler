@@ -1,7 +1,7 @@
-import { IConfig } from "../interfaces/config.interface";
+import { IConfig } from '../interfaces/config.interface';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import * as process from "process";
+import * as process from 'process';
 
 export class ConfigLocalService implements IConfig {
     async getDatabaseConfig(): Promise<TypeOrmModuleOptions> {
@@ -19,5 +19,9 @@ export class ConfigLocalService implements IConfig {
             },
             namingStrategy: new SnakeNamingStrategy(),
         };
+    }
+
+    async getKakaoLocalApiKey(): Promise<string> {
+        return process.env['kakao_rest_api_key'];
     }
 }
