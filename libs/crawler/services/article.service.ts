@@ -14,19 +14,15 @@ export class ArticleService {
     ) {}
 
     async findOneById(id: number) {
-        return this.articleRepository.findOne({
-            where: {
-                id,
-            },
+        return this.articleRepository.findOneBy({
+            id,
         });
     }
 
     async findOneByNo(type: CrawlerType, no: string) {
-        return this.articleRepository.findOne({
-            where: {
-                type,
-                no,
-            },
+        return this.articleRepository.findOneBy({
+            type,
+            no,
         });
     }
 

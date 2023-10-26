@@ -17,18 +17,14 @@ export class NaverLandArticleService {
     }
 
     async findOneById(id: number) {
-        return this.naverLandArticleRepository.findOne({
-            where: {
-                id,
-            },
+        return this.naverLandArticleRepository.findOneBy({
+            id,
         });
     }
 
     async findOneByArticleNo(articleNo: string) {
-        return this.naverLandArticleRepository.findOne({
-            where: {
-                articleNo,
-            },
+        return this.naverLandArticleRepository.findOneBy({
+            articleNo,
         });
     }
 
