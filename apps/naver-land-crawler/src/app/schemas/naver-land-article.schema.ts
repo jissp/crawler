@@ -72,10 +72,34 @@ export class NaverLandArticle implements INaverLandArticleSchema {
     spcRatio: number;
 
     @Column({
+        type: 'tinyint',
+        unsigned: true,
+    })
+    roomCount!: number;
+
+    @Column({
+        type: 'tinyint',
+        unsigned: true,
+    })
+    floor!: number;
+
+    @Column({
+        type: 'tinyint',
+        unsigned: true,
+    })
+    maxFloor!: number;
+
+    @Column({
         type: 'enum',
         enum: Direction,
     })
     direction: Direction;
+
+    @Column({
+        type: 'tinyint',
+        unsigned: true,
+    })
+    completionYear!: number;
 
     @Column({
         type: 'decimal',
