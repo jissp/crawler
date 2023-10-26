@@ -117,3 +117,22 @@ export enum Direction {
     북서향 = '북서향',
     남서향 = '남서향',
 }
+
+export type ResponseTag = ResponseRoomTag | ResponseCompletionYearTag;
+
+export enum ResponseRoomTag {
+    방한개 = '방한개',
+    방두개 = '방두개',
+    방세개 = '방세개',
+    방네개이상 = '방네개이상',
+}
+
+export enum ResponseCompletionYearTag {
+    '2년이내' = '2년이내',
+    '4년이내' = '4년이내',
+    '10년이내' = '10년이내',
+    '15년이내' = '15년이내',
+    '25년이내' = '25년이내',
+    '25년이상' = '25년이상',
+    '30년이상' = '30년이상',
+}
