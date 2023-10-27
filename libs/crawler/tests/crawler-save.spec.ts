@@ -6,14 +6,15 @@ import { loadDatabaseContainer } from '@libs/utils/test/load-database-container'
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { CrawlerModule } from '@libs/crawler/crawler.module';
-import { ArticleService } from '@libs/crawler/services/article.service';
+import { CrawlerService } from '@libs/crawler/services/crawler.service';
 import { CrawlerType } from '@libs/crawler/interfaces/crawler.interface';
 import { NaverLandCrawlerModule } from '@libs/naver-land-crawler/naver-land-crawler.module';
 
 describe('Crawler Save Test', () => {
     let databaseContainer: StartedTestContainer;
+
     let naverLandCrawler: NaverLandCrawler;
-    let articleService: ArticleService;
+    let crawlerService: CrawlerService;
 
     beforeAll(async () => {
         const dbConfig = {
@@ -43,7 +44,7 @@ describe('Crawler Save Test', () => {
         }).compile();
 
         naverLandCrawler = moduleRef.get<NaverLandCrawler>(NaverLandCrawler);
-        articleService = moduleRef.get<ArticleService>(ArticleService);
+        crawlerService = moduleRef.get<CrawlerService>(CrawlerService);
     });
 
     afterAll(async () => {
@@ -68,7 +69,7 @@ describe('Crawler Save Test', () => {
         // 저장 테스트
         const results = await Promise.allSettled(
             oriArticles.map((oriArticle) => {
-                return articleService.save({
+                return crawlerService.save({
                     type: CrawlerType.NAVER_LAND,
                     no: oriArticle.atclNo,
                     data: oriArticle,
@@ -81,7 +82,7 @@ describe('Crawler Save Test', () => {
         ).toBeGreaterThan(0);
 
         // 데이터 조회 후 테스트
-        const articles = await articleService.findManyByType(
+        const articles = await crawlerService.findManyByType(
             CrawlerType.NAVER_LAND,
         );
 

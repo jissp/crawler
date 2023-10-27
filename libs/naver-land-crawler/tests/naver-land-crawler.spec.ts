@@ -2,13 +2,39 @@ import { Test } from '@nestjs/testing';
 import { baseNaverLandRequestDto } from '@libs/naver-land-client/tests/test.util';
 import { NaverLandCrawler } from '@libs/naver-land-crawler/naver-land.crawler';
 import { NaverLandCrawlerModule } from '@libs/naver-land-crawler/naver-land-crawler.module';
+import { StartedTestContainer } from 'testcontainers';
+import { loadDatabaseContainer } from '@libs/utils/test/load-database-container';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 describe('NaverLandCrawler', () => {
+    let databaseContainer: StartedTestContainer;
     let naverLandCrawler: NaverLandCrawler;
 
     beforeAll(async () => {
+        const dbConfig = {
+            databaseName: 'test',
+            user: 'test',
+            password: 'test',
+        };
+
+        databaseContainer = await loadDatabaseContainer(dbConfig).start();
+
         const moduleRef = await Test.createTestingModule({
-            imports: [NaverLandCrawlerModule],
+            imports: [
+                TypeOrmModule.forRoot({
+                    type: 'mysql',
+                    database: dbConfig.databaseName,
+                    username: dbConfig.user,
+                    password: dbConfig.password,
+                    host: databaseContainer.getHost(),
+                    port: databaseContainer.getMappedPort(3306),
+                    synchronize: false,
+                    autoLoadEntities: true,
+                    namingStrategy: new SnakeNamingStrategy(),
+                }),
+                NaverLandCrawlerModule,
+            ],
         }).compile();
 
         naverLandCrawler = moduleRef.get<NaverLandCrawler>(NaverLandCrawler);

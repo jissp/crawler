@@ -9,13 +9,18 @@ export interface INaverLandArticleSchema {
     atclNm: string;
     rletTpNm: RealEstateTypeName;
     tradTpCd: TradeType;
-    // flrInfo;
+    region1?: string;
+    region2?: string;
+    region3?: string;
     price: number;
     spc1: number;
     spc2: number;
     spcRatio: number;
+    roomCount: number;
+    floor: number;
+    maxFloor: number;
+    completionYear: number;
     direction: Direction;
     lat: number;
     lng: number;
-    // tagList: [];
 }
