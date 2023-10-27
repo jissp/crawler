@@ -44,6 +44,24 @@ export class NaverLandArticle implements INaverLandArticleSchema {
     tradTpCd: TradeType;
 
     @Column({
+        type: 'varchar',
+        length: 20,
+    })
+    region1: string;
+
+    @Column({
+        type: 'varchar',
+        length: 20,
+    })
+    region2: string;
+
+    @Column({
+        type: 'varchar',
+        length: 20,
+    })
+    region3: string;
+
+    @Column({
         type: 'integer',
         unsigned: true,
     })

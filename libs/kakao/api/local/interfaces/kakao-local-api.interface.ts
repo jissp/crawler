@@ -5,7 +5,7 @@ export interface IGetAddressByCoord2Response {
     documents: IDocument[];
 }
 
-interface IDocument {
+export interface IDocument {
     road_address: IRoadAddress;
     address: IAddress;
 }

@@ -1,7 +1,7 @@
 import {
     Direction,
-    RealEstateTypeName, ResponseCompletionYearTag
-} from "@libs/naver-land-client/interfaces/article.interface";
+    RealEstateTypeName,
+} from '@libs/naver-land-client/interfaces/article.interface';
 import { TradeType } from '@libs/naver-land-client/interfaces/naver-land.interface';
 
 export interface INaverLandArticleSchema {
@@ -9,6 +9,9 @@ export interface INaverLandArticleSchema {
     atclNm: string;
     rletTpNm: RealEstateTypeName;
     tradTpCd: TradeType;
+    region1?: string;
+    region2?: string;
+    region3?: string;
     price: number;
     spc1: number;
     spc2: number;

@@ -87,5 +87,11 @@ describe('NaverLandCrawler', () => {
 
         const savedNaverLandArticles = await naverLandCrawlerService.findAll();
         expect(savedNaverLandArticles.length).toBe(fulfilledResponse.length);
+
+        for (const savedNaverLandArticle of savedNaverLandArticles) {
+            expect(savedNaverLandArticle.region1).toBeDefined();
+            expect(savedNaverLandArticle.region2).toBeDefined();
+            expect(savedNaverLandArticle.region3).toBeDefined();
+        }
     });
 });
