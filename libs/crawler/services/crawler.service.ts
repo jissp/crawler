@@ -7,7 +7,7 @@ import * as _ from 'lodash';
 import { IArticleSchema } from '@libs/crawler/interfaces/article.schema.interface';
 
 @Injectable()
-export class ArticleService {
+export class CrawlerService {
     constructor(
         @InjectRepository(Article)
         private readonly articleRepository: Repository<Article>,

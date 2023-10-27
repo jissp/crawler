@@ -62,8 +62,8 @@ export class NaverLandCrawler extends CrawlerAbstract<CrawlerType.NAVER_LAND> {
             spcRatio: (data.spc2 / data.spc1) * 100,
             roomCount: this.transformRoomCount(data),
             completionYear: this.transformCompletionYear(data),
-            floor: Number(floor),
-            maxFloor: Number(maxFloor),
+            floor: floor ? Number(floor) : null,
+            maxFloor: maxFloor ? Number(maxFloor) : null,
             direction: data.direction,
             lat: data.lat,
             lng: data.lng,
@@ -109,7 +109,11 @@ export class NaverLandCrawler extends CrawlerAbstract<CrawlerType.NAVER_LAND> {
         }
     }
 
-    private transformFloor(flrInfo: string) {
+    private transformFloor(flrInfo?: string) {
+        if (!flrInfo) {
+            return [undefined, undefined];
+        }
+
         return flrInfo.split('/');
     }
 }

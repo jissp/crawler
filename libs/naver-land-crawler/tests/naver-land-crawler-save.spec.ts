@@ -1,21 +1,19 @@
 import { Test } from '@nestjs/testing';
 import { baseNaverLandRequestDto } from '@libs/naver-land-client/tests/test.util';
 import { NaverLandCrawler } from '@libs/naver-land-crawler/naver-land.crawler';
-import { NaverLandArticleService } from '../app/services/naver-land-article.service';
 import { StartedTestContainer } from 'testcontainers';
 import { loadDatabaseContainer } from '@libs/utils/test/load-database-container';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
-import { Article } from '@libs/crawler/schemas/article.schema';
-import { NaverLandArticle } from '../app/schemas/naver-land-article.schema';
 import { CrawlerModule } from '@libs/crawler/crawler.module';
 import { NaverLandCrawlerModule } from '@libs/naver-land-crawler/naver-land-crawler.module';
+import { NaverLandCrawlerService } from '@libs/naver-land-crawler/naver-land-crawler.service';
 
 describe('NaverLandCrawler', () => {
     let databaseContainer: StartedTestContainer;
 
     let naverLandCrawler: NaverLandCrawler;
-    let naverLandArticleService: NaverLandArticleService;
+    let naverLandCrawlerService: NaverLandCrawlerService;
 
     beforeAll(async () => {
         const dbConfig = {
@@ -39,17 +37,16 @@ describe('NaverLandCrawler', () => {
                     autoLoadEntities: true,
                     namingStrategy: new SnakeNamingStrategy(),
                 }),
-                TypeOrmModule.forFeature([Article, NaverLandArticle]),
                 CrawlerModule,
                 NaverLandCrawlerModule,
             ],
-            providers: [NaverLandArticleService],
-            exports: [NaverLandArticleService],
+            providers: [],
+            exports: [],
         }).compile();
 
         naverLandCrawler = moduleRef.get<NaverLandCrawler>(NaverLandCrawler);
-        naverLandArticleService = moduleRef.get<NaverLandArticleService>(
-            NaverLandArticleService,
+        naverLandCrawlerService = moduleRef.get<NaverLandCrawlerService>(
+            NaverLandCrawlerService,
         );
     });
 
@@ -78,7 +75,7 @@ describe('NaverLandCrawler', () => {
 
         const response = await Promise.allSettled(
             naverLandArticles.map((naverLandArticle) => {
-                return naverLandArticleService.save(naverLandArticle);
+                return naverLandCrawlerService.save(naverLandArticle);
             }),
         );
 
@@ -88,7 +85,7 @@ describe('NaverLandCrawler', () => {
 
         expect(fulfilledResponse.length).toBeGreaterThan(0);
 
-        const savedNaverLandArticles = await naverLandArticleService.findAll();
+        const savedNaverLandArticles = await naverLandCrawlerService.findAll();
         expect(savedNaverLandArticles.length).toBe(fulfilledResponse.length);
     });
 });
