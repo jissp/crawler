@@ -5,6 +5,10 @@ import { ConfigModule } from '@libs/config/config.module';
 import { CrawlerModule } from '@libs/crawler/crawler.module';
 import { CollectController } from './controllers/collect.controller';
 import { NaverLandCrawlerModule } from '@libs/naver-land-crawler/naver-land-crawler.module';
+import { QueueType } from '@libs/common/interfaces/queue-type.interface';
+import { QueueService } from './services/queue.service';
+import { BullModule } from '@nestjs/bull';
+import { CrawlerRequestConsumer } from './consumers/crawler-request.consumer';
 
 @Module({
     imports: [
@@ -14,10 +18,19 @@ import { NaverLandCrawlerModule } from '@libs/naver-land-crawler/naver-land-craw
             useFactory: async (configService: ConfigService) =>
                 configService.getDatabaseConfig(),
         }),
+        BullModule.forRootAsync({
+            imports: [ConfigModule],
+            inject: [ConfigService],
+            useFactory: async (configService: ConfigService) =>
+                configService.getRedisConfig(),
+        }),
+        BullModule.registerQueue({
+            name: QueueType.CRAWLER_REQUEST,
+        }),
         CrawlerModule,
         NaverLandCrawlerModule,
     ],
-    providers: [],
+    providers: [QueueService, CrawlerRequestConsumer],
     controllers: [CollectController],
 })
 export class NaverLandCrawlerAppModule {}
