@@ -21,9 +21,8 @@ describe('NaverLandCrawler', () => {
     ): ArticleListRequestDto => {
         return {
             rletTpCd: dto.rletTpCd ?? [
-                RealEstateType.APT,
-                RealEstateType.OPST,
-                RealEstateType.OBYG,
+                RealEstateType.아파트,
+                RealEstateType.오피스텔,
             ],
             tradTpCd: [TradeType.매매], // 매매
             z: dto.z,
@@ -139,7 +138,7 @@ describe('NaverLandCrawler', () => {
             rgt: 127.1330398,
         }),
         단독주택: baseNaverLandRequestDto({
-            rletTpCd: [RealEstateType.DDDGG, RealEstateType.JWJT],
+            rletTpCd: [RealEstateType['단독/다가구'], RealEstateType.전원주택],
             z: 12,
             lat: 37.5385348,
             lon: 127.0896417,

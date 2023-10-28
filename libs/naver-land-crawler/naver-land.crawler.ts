@@ -57,6 +57,7 @@ export class NaverLandCrawler extends CrawlerAbstract<CrawlerType.NAVER_LAND> {
             rletTpNm: data.rletTpNm as RealEstateTypeName,
             tradTpCd: data.tradTpCd,
             price: data.prc,
+            rentPrice: data.rentPrc,
             spc1: data.spc1,
             spc2: data.spc2,
             spcRatio: (data.spc2 / data.spc1) * 100,
