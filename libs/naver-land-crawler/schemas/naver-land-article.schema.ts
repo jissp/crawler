@@ -68,6 +68,12 @@ export class NaverLandArticle implements INaverLandArticleSchema {
     price!: number;
 
     @Column({
+        type: 'integer',
+        unsigned: true,
+    })
+    rentPrice!: number;
+
+    @Column({
         type: 'decimal',
         precision: 8,
         scale: 2,
