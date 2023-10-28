@@ -2,6 +2,7 @@ import { IConfig } from '../interfaces/config.interface';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import * as process from 'process';
+import { BullRootModuleOptions } from '@nestjs/bull/dist/interfaces/bull-module-options.interface';
 
 export class ConfigLocalService implements IConfig {
     async getDatabaseConfig(): Promise<TypeOrmModuleOptions> {
@@ -23,5 +24,14 @@ export class ConfigLocalService implements IConfig {
 
     async getKakaoLocalApiKey(): Promise<string> {
         return process.env['kakao_rest_api_key'];
+    }
+
+    async getRedisConfig(): Promise<BullRootModuleOptions> {
+        return {
+            redis: {
+                host: process.env['redis_host'],
+                port: Number(process.env['redis_port']),
+            },
+        };
     }
 }
