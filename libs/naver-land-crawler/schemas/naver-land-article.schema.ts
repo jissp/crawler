@@ -70,8 +70,9 @@ export class NaverLandArticle implements INaverLandArticleSchema {
     @Column({
         type: 'integer',
         unsigned: true,
+        nullable: true,
     })
-    rentPrice!: number;
+    rentPrice?: number;
 
     @Column({
         type: 'decimal',
