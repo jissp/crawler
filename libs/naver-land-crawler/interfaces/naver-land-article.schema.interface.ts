@@ -13,7 +13,7 @@ export interface INaverLandArticleSchema {
     region2?: string;
     region3?: string;
     price: number;
-    rentPrice: number;
+    rentPrice?: number;
     spc1: number;
     spc2: number;
     spcRatio: number;

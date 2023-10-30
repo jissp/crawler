@@ -41,6 +41,7 @@ create table naver_land_articles
     region2         varchar(20)                                                                                                                                              null,
     region3         varchar(20)                                                                                                                                              null,
     price           int unsigned     default '0'                                                                                                                             null,
+    rent_price      int unsigned                                                                                                                                             null,
     spc1            decimal(8, 2)    default 0.00                                                                                                                            null,
     spc2            decimal(8, 2)    default 0.00                                                                                                                            null,
     spc_ratio       decimal(5, 2)    default 0.00                                                                                                                            not null,
