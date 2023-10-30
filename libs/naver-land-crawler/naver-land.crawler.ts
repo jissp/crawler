@@ -131,6 +131,14 @@ export class NaverLandCrawler extends CrawlerAbstract<CrawlerType.NAVER_LAND> {
             return [undefined, undefined];
         }
 
-        return flrInfo.split('/');
+        const [floor, maxFloor] = flrInfo.split('/');
+
+        const isFloorNan = isNaN(Number(floor));
+        const isMaxFloorNan = isNaN(Number(maxFloor));
+
+        return [
+            isFloorNan ? undefined : Number(floor),
+            isMaxFloorNan ? undefined : Number(maxFloor),
+        ];
     }
 }
