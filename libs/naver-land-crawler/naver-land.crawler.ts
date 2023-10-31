@@ -77,7 +77,7 @@ export class NaverLandCrawler extends CrawlerAbstract<CrawlerType.NAVER_LAND> {
             spc1: data.spc1,
             spc2: data.spc2,
             spcRatio: (data.spc2 / data.spc1) * 100,
-            spcPrice: data.prc / data.spc2,
+            spcPrice: data.spc2 > 0 ? data.prc / data.spc2 : 0,
             roomCount: this.transformRoomCount(data),
             completionYear: this.transformCompletionYear(data),
             floor: floor ? Number(floor) : null,
