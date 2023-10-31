@@ -37,7 +37,7 @@ export class NaverLandCrawlerService {
 
         _naverLandArticle = _.merge(_naverLandArticle, naverLandArticle);
 
-        if (!_naverLandArticle.region1) {
+        if (!_naverLandArticle.address) {
             const coord = await this.coord2addressService.getAddressByCoord({
                 lat: _naverLandArticle.lat,
                 lng: _naverLandArticle.lng,
@@ -46,6 +46,7 @@ export class NaverLandCrawlerService {
             _naverLandArticle.region1 = coord.data.address.region_1depth_name;
             _naverLandArticle.region2 = coord.data.address.region_2depth_name;
             _naverLandArticle.region3 = coord.data.address.region_3depth_name;
+            _naverLandArticle.address = coord.data.address.address_name;
         }
 
         return this.naverLandArticleRepository.save(_naverLandArticle);

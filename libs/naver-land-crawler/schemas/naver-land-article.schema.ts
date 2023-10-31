@@ -62,6 +62,12 @@ export class NaverLandArticle implements INaverLandArticleSchema {
     region3: string;
 
     @Column({
+        type: 'varchar',
+        length: 500,
+    })
+    address: string;
+
+    @Column({
         type: 'integer',
         unsigned: true,
     })
@@ -94,6 +100,13 @@ export class NaverLandArticle implements INaverLandArticleSchema {
         scale: 2,
     })
     spcRatio: number;
+
+    @Column({
+        type: 'decimal',
+        precision: 5,
+        scale: 2,
+    })
+    spcPrice: number;
 
     @Column({
         type: 'tinyint',

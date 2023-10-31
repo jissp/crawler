@@ -1,34 +1,3 @@
-create table articles
-(
-    id         bigint unsigned auto_increment
-        primary key,
-    type       enum ('NAVER_LAND')                null,
-    no         varchar(50)                        not null,
-    data       json                               null,
-    created_at datetime default CURRENT_TIMESTAMP null,
-    updated_at datetime                           null on update CURRENT_TIMESTAMP
-);
-
-create index articles_no_index
-    on articles (no);
-
-create index articles_type_no_index
-    on articles (type, no);
-
-create table coords
-(
-    id         bigint unsigned auto_increment
-        primary key,
-    latitude   decimal(13, 10)                    not null,
-    longitude  decimal(13, 10)                    null,
-    data       json                               null,
-    created_at datetime default CURRENT_TIMESTAMP null,
-    updated_at datetime                           null on update CURRENT_TIMESTAMP
-);
-
-create index coords_latitude_longitude_index
-    on coords (latitude, longitude);
-
 create table naver_land_articles
 (
     id              bigint unsigned auto_increment
@@ -40,11 +9,13 @@ create table naver_land_articles
     region1         varchar(20)                                                                                                                                              null,
     region2         varchar(20)                                                                                                                                              null,
     region3         varchar(20)                                                                                                                                              null,
+    address         varchar(500)                                                                                                                                             null,
     price           int unsigned     default '0'                                                                                                                             null,
     rent_price      int unsigned                                                                                                                                             null,
     spc1            decimal(8, 2)    default 0.00                                                                                                                            null,
     spc2            decimal(8, 2)    default 0.00                                                                                                                            null,
     spc_ratio       decimal(5, 2)    default 0.00                                                                                                                            not null,
+    spc_price       decimal(8, 2)    default 0.00                                                                                                                            null,
     room_count      tinyint unsigned default '0'                                                                                                                             null,
     floor           tinyint unsigned default '0'                                                                                                                             null,
     max_floor       tinyint unsigned default '0'                                                                                                                             null,
