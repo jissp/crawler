@@ -12,6 +12,8 @@ import {
 } from '@libs/naver-land-client/interfaces/naver-land.interface';
 import { ArticleListRequestDto } from '@libs/naver-land-client/dtos/article-list.request.dto';
 
+// push 테스트
+
 describe('NaverLandCrawler', () => {
     let naverLandCrawler: NaverLandCrawler;
 
