@@ -1,42 +1,42 @@
 export enum RealEstateType {
     /** 아파트 */
-    APT = 'APT',
+    '아파트' = 'APT',
     /** 오피스텔 */
-    OPST = 'OPST',
+    '오피스텔' = 'OPST',
     /** 빌라 */
-    VL = 'VL',
+    '빌라' = 'VL',
     /** 아파트분양권 */
-    ABYG = 'ABYG',
+    '아파트분양권' = 'ABYG',
     /** 오피스텔분양권 */
-    OBYG = 'OBYG',
+    '오피스텔분양권' = 'OBYG',
     /** 재건축 */
-    JGC = 'JGC',
+    '재건축' = 'JGC',
     /** 전원주택 */
-    JWJT = 'JWJT',
+    '전원주택' = 'JWJT',
     /** 단독/다가구 */
-    DDDGG = 'DDDGG',
+    '단독/다가구' = 'DDDGG',
     /** 상가주택 */
-    SGJT = 'SGJT',
+    '상가주택' = 'SGJT',
     /** 한옥주택 */
-    HOJT = 'HOJT',
+    '한옥주택' = 'HOJT',
     /** 재개발 */
-    JGB = 'JGB',
+    '재개발' = 'JGB',
     /** 원룸 */
-    OR = 'OR',
+    '원룸' = 'OR',
     /** 고시원 */
-    GSW = 'GSW',
+    '고시원' = 'GSW',
     /** 상가 */
-    SG = 'SG',
+    '상가' = 'SG',
     /** 사무실 */
-    SMS = 'SMS',
+    '사무실' = 'SMS',
     /** 공장/창고 */
-    GJCG = 'GJCG',
+    '공장/창고' = 'GJCG',
     /** 건물 */
-    GM = 'GM',
+    '건물' = 'GM',
     /** 토지 */
-    TJ = 'TJ',
+    '토지' = 'TJ',
     /** 지식산업센터 */
-    APTHGJ = 'APTHGJ',
+    '지식산업센터' = 'APTHGJ',
 }
 
 export enum TradeType {
@@ -44,10 +44,10 @@ export enum TradeType {
     매매 = 'A1',
     /** 전세 */
     전세 = 'B1',
-    /** 단기임대 */
-    단기임대 = 'B2',
     /** 월세 */
-    월세 = 'B3',
+    월세 = 'B2',
+    /** 단기임대 */
+    단기임대 = 'B3',
 }
 
 export type Tag =

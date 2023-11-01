@@ -33,11 +33,15 @@ export class CrawlerService {
     }
 
     async save(article: Partial<IArticleSchema>) {
-        let _article =
-            (await this.findOneByNo(article.type, article.no)) ?? new Article();
+        try {
+            let _article =
+                (await this.findOneByNo(article.type, article.no)) ?? new Article();
 
-        _article = _.merge(_article, article);
+            _article = _.merge(_article, article);
 
-        return this.articleRepository.save(_article);
+            return this.articleRepository.save(_article);
+        } catch (e) {
+            console.log(e);
+        }
     }
 }

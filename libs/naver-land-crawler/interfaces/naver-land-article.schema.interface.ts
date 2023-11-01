@@ -12,10 +12,13 @@ export interface INaverLandArticleSchema {
     region1?: string;
     region2?: string;
     region3?: string;
+    address: string;
     price: number;
+    rentPrice?: number;
     spc1: number;
     spc2: number;
     spcRatio: number;
+    spcPrice: number;
     roomCount: number;
     floor: number;
     maxFloor: number;

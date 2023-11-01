@@ -45,8 +45,8 @@ export interface IArticle {
     vrfcTpCd: string;
     flrInfo: string;
     prc: number;
-    rentPrc: number;
-    hanPrc: string;
+    rentPrc?: number;
+    hanPrc?: string;
     spc1: number;
     spc2: number;
     direction: Direction;

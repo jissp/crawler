@@ -7,34 +7,53 @@ import {
 import { Injectable } from '@nestjs/common';
 import { NaverLandClient } from '@libs/naver-land-client/naver-land.client';
 import {
-    IArticle,
     RealEstateTypeName,
     ResponseCompletionYearTag,
     ResponseRoomTag,
 } from '@libs/naver-land-client/interfaces/article.interface';
 import { uSleep } from '@libs/utils/usleep.util';
 import { INaverLandArticleSchema } from '@libs/naver-land-crawler/interfaces/naver-land-article.schema.interface';
+import { NaverLandCrawlerService } from '@libs/naver-land-crawler/naver-land-crawler.service';
+import { CrawlerService } from '@libs/crawler/services/crawler.service';
+import { TradeType } from '@libs/naver-land-client/interfaces/naver-land.interface';
 
 @Injectable()
 export class NaverLandCrawler extends CrawlerAbstract<CrawlerType.NAVER_LAND> {
-    constructor(protected readonly client: NaverLandClient) {
+    constructor(
+        protected readonly client: NaverLandClient,
+        private readonly crawlerService: CrawlerService,
+        private readonly naverLandCrawlerService: NaverLandCrawlerService,
+    ) {
         super(client);
     }
 
-    async run(dto: CrawlerDto<CrawlerType.NAVER_LAND>): Promise<IArticle[]> {
+    async run(dto: CrawlerDto<CrawlerType.NAVER_LAND>): Promise<void> {
         let page = dto.page ?? 1;
         const maxPage = dto.maxPage ?? 99;
 
-        const articles: IArticle[] = [];
         while (true) {
             dto.page = page;
-            const articleResponse = await this.client.getArticleList(dto);
 
+            const articleResponse = await this.client.getArticleList(dto);
             if (articleResponse.body.length === 0) {
                 break;
             }
 
-            articles.push(...articleResponse.body);
+            await Promise.all(
+                articleResponse.body.map(async (article) => {
+                    // Crawler 정보 저장
+                    await this.crawlerService.save({
+                        type: CrawlerType.NAVER_LAND,
+                        no: article.atclNo,
+                        data: article,
+                    });
+
+                    // 네이버 매물 정보 가공 후 저장
+                    return this.naverLandCrawlerService.save(
+                        this.transform(article),
+                    );
+                }),
+            );
 
             if (page++ >= maxPage) {
                 break;
@@ -42,14 +61,16 @@ export class NaverLandCrawler extends CrawlerAbstract<CrawlerType.NAVER_LAND> {
 
             await uSleep(3000);
         }
-
-        return articles;
     }
 
     transform(
         data: CrawlerParseResponse<CrawlerType.NAVER_LAND>,
     ): Partial<INaverLandArticleSchema> {
         const [floor, maxFloor] = this.transformFloor(data.flrInfo);
+        const spcPrice =
+            data.tradTpCd === TradeType.매매 && data.spc2 > 0
+                ? data.prc / data.spc2
+                : null;
 
         return {
             articleNo: data.atclNo,
@@ -57,9 +78,11 @@ export class NaverLandCrawler extends CrawlerAbstract<CrawlerType.NAVER_LAND> {
             rletTpNm: data.rletTpNm as RealEstateTypeName,
             tradTpCd: data.tradTpCd,
             price: data.prc,
+            rentPrice: data.rentPrc,
             spc1: data.spc1,
             spc2: data.spc2,
             spcRatio: (data.spc2 / data.spc1) * 100,
+            spcPrice,
             roomCount: this.transformRoomCount(data),
             completionYear: this.transformCompletionYear(data),
             floor: floor ? Number(floor) : null,
@@ -114,6 +137,14 @@ export class NaverLandCrawler extends CrawlerAbstract<CrawlerType.NAVER_LAND> {
             return [undefined, undefined];
         }
 
-        return flrInfo.split('/');
+        const [floor, maxFloor] = flrInfo.split('/');
+
+        const isFloorNan = isNaN(Number(floor));
+        const isMaxFloorNan = isNaN(Number(maxFloor));
+
+        return [
+            isFloorNan ? undefined : Number(floor),
+            isMaxFloorNan ? undefined : Number(maxFloor),
+        ];
     }
 }
