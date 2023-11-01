@@ -8,13 +8,14 @@ import { AwsRecentCrawler } from '@libs/aws-recent-crawler/aws-recent-crawler';
 import { CrawlerModule } from '@libs/crawler/crawler.module';
 import { CrawlerService } from '@libs/crawler/services/crawler.service';
 import { CrawlerType } from '@libs/crawler/interfaces/crawler.interface';
+import { AwsRecentCrawlerService } from '@libs/aws-recent-crawler/aws-recent-crawler.service';
 
 describe('AwsRecentCrawler', () => {
     let databaseContainer: StartedTestContainer;
 
     let awsRecentCrawler: AwsRecentCrawler;
     let crawlerService: CrawlerService;
-    // let awsRecentCrawlerService: AwsRecentCrawlerService;
+    let awsRecentCrawlerService: AwsRecentCrawlerService;
 
     beforeAll(async () => {
         const dbConfig = {
@@ -45,16 +46,29 @@ describe('AwsRecentCrawler', () => {
 
         awsRecentCrawler = moduleRef.get<AwsRecentCrawler>(AwsRecentCrawler);
         crawlerService = moduleRef.get<CrawlerService>(CrawlerService);
+        awsRecentCrawlerService = moduleRef.get<AwsRecentCrawlerService>(
+            AwsRecentCrawlerService,
+        );
     });
 
     afterAll(async () => {
         await databaseContainer.stop();
     });
 
-    it('run', async () => {
+    it('AWS Recent 데이터가 Crawler 테이블에 수집 되어야 한다.', async () => {
         await awsRecentCrawler.run();
 
-        const articles = await crawlerService.findManyByType(CrawlerType.AWS_RECENT);
+        const articles = await crawlerService.findManyByType(
+            CrawlerType.AWS_RECENT,
+        );
+
+        expect(articles.length).toBeGreaterThan(0);
+    });
+
+    it('AWS Recent 데이터가 AwsRecentArticle 테이블에 수집 되어야 한다.', async () => {
+        await awsRecentCrawler.run();
+
+        const articles = await awsRecentCrawlerService.findAll();
 
         expect(articles.length).toBeGreaterThan(0);
     });
