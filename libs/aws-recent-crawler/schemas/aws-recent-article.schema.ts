@@ -5,13 +5,14 @@ import {
     PrimaryGeneratedColumn,
     UpdateDateColumn,
 } from 'typeorm';
+import { IAwsRecentArticleSchema } from '@libs/aws-recent-crawler/schemas/aws-recent-article.interface';
 
 @Entity({
     name: 'aws_recent_articles',
 })
-export class AwsRecentArticle {
+export class AwsRecentArticle implements IAwsRecentArticleSchema {
     @PrimaryGeneratedColumn()
-    id: number;
+    id?: number;
 
     @Column({
         type: 'varchar',
@@ -24,7 +25,7 @@ export class AwsRecentArticle {
         length: 255,
         nullable: true,
     })
-    category: string;
+    category?: string;
 
     @Column({
         type: 'varchar',
@@ -42,19 +43,19 @@ export class AwsRecentArticle {
         length: 40,
         nullable: true,
     })
-    author: string;
+    author?: string;
 
     @Column({
         type: 'varchar',
         length: 255,
         nullable: true,
     })
-    link: string;
+    link?: string;
 
     @Column({
         type: 'timestamp',
     })
-    pubDate: Date;
+    pubAt: Date;
 
     @CreateDateColumn({
         type: 'timestamp',

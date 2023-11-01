@@ -12,6 +12,7 @@ import * as _ from 'lodash';
 import { CrawlerService } from '@libs/crawler/services/crawler.service';
 import { AwsRecentArticle } from '@libs/aws-recent-crawler/schemas/aws-recent-article.schema';
 import { AwsRecentCrawlerService } from '@libs/aws-recent-crawler/aws-recent-crawler.service';
+import { IAwsRecentArticleSchema } from "@libs/aws-recent-crawler/schemas/aws-recent-article.interface";
 
 const parseByXml = util.promisify(parseString);
 
@@ -33,7 +34,7 @@ export class AwsRecentCrawler extends CrawlerAbstract<CrawlerType.AWS_RECENT> {
         const transformedItems = items.map(this.transform);
         const sortedTransformedItems = _.sortBy(transformedItems, 'pubDate');
 
-        await Promise.allSettled(
+        const results = await Promise.allSettled(
             sortedTransformedItems.map(async (item) => {
                 // Crawler 정보 저장
                 await this.crawlerService.save({
@@ -46,6 +47,8 @@ export class AwsRecentCrawler extends CrawlerAbstract<CrawlerType.AWS_RECENT> {
                 return this.awsRecentCrawlerService.save(item);
             }),
         );
+
+        console.log(results);
     }
 
     private async parseXml(recent: string) {
@@ -56,7 +59,7 @@ export class AwsRecentCrawler extends CrawlerAbstract<CrawlerType.AWS_RECENT> {
 
     transform(
         data: CrawlerParseResponse<CrawlerType.AWS_RECENT>,
-    ): Partial<AwsRecentArticle> {
+    ): IAwsRecentArticleSchema {
         return {
             guid: data.guid[0]._,
             title: data.title[0],
@@ -64,7 +67,7 @@ export class AwsRecentCrawler extends CrawlerAbstract<CrawlerType.AWS_RECENT> {
             description: data.description[0],
             category: data.category[0],
             author: data.author[0],
-            pubDate: new Date(data.pubDate[0]),
+            pubAt: new Date(data.pubDate[0]),
         };
     }
 }

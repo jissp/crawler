@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { AwsRecentArticle } from '@libs/aws-recent-crawler/schemas/aws-recent-article.schema';
 import { InjectRepository } from '@nestjs/typeorm';
+import { IAwsRecentArticleSchema } from '@libs/aws-recent-crawler/schemas/aws-recent-article.interface';
+import * as _ from 'lodash';
 
 @Injectable()
 export class AwsRecentCrawlerService {
@@ -26,10 +28,12 @@ export class AwsRecentCrawlerService {
         });
     }
 
-    async save(awsRecentArticle: Partial<AwsRecentArticle>) {
+    async save(awsRecentArticle: IAwsRecentArticleSchema) {
         let _awsRecentArticle =
             (await this.findOneByGuid(awsRecentArticle.guid)) ??
             new AwsRecentArticle();
+
+        _awsRecentArticle = _.merge(_awsRecentArticle, awsRecentArticle);
 
         return this.awsRecentArticleRepository.save(_awsRecentArticle);
     }
