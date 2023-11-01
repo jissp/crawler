@@ -2,12 +2,17 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService } from '@libs/config/services/config.service';
 import { ConfigModule } from '@libs/config/config.module';
-import { CollectController } from './controllers/collect.controller';
-import { NaverLandCrawlerModule } from '@libs/naver-land-crawler/naver-land-crawler.module';
 import { QueueType } from '@libs/common/interfaces/queue-type.interface';
-import { QueueService } from './services/queue.service';
 import { BullModule } from '@nestjs/bull';
-import { CrawlerRequestConsumer } from './consumers/crawler-request.consumer';
+import { CrawlerNaverLandRequestConsumer } from './consumers/crawler-naver-land-request.consumer';
+import { NaverLandCrawlerModule } from '@libs/naver-land-crawler/naver-land-crawler.module';
+import { NaverLandCrawlerQueue } from './queues/naver-land-crawler-queue';
+import { NaverLandController } from './controllers/naver-land.controller';
+import { AwsRecentController } from './controllers/aws-recent.controller';
+import { AwsRecentCrawlerModule } from '@libs/aws-recent-crawler/aws-recent-crawler.module';
+
+const QueueProviders = [NaverLandCrawlerQueue];
+const ConsumerProviders = [CrawlerNaverLandRequestConsumer];
 
 @Module({
     imports: [
@@ -24,11 +29,13 @@ import { CrawlerRequestConsumer } from './consumers/crawler-request.consumer';
                 configService.getRedisConfig(),
         }),
         BullModule.registerQueue({
-            name: QueueType.CRAWLER_REQUEST,
+            name: QueueType.CRAWLER_NAVER_LAND_REQUEST,
         }),
+        ConfigModule,
         NaverLandCrawlerModule,
+        AwsRecentCrawlerModule,
     ],
-    providers: [QueueService, CrawlerRequestConsumer],
-    controllers: [CollectController],
+    providers: [...QueueProviders, ...ConsumerProviders],
+    controllers: [NaverLandController, AwsRecentController],
 })
-export class NaverLandCrawlerAppModule {}
+export class CrawlerAppModule {}

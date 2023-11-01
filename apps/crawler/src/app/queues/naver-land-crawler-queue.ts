@@ -5,14 +5,15 @@ import { QueueType } from '@libs/common/interfaces/queue-type.interface';
 import { ArticleListRequestDto } from '@libs/naver-land-client/dtos/article-list.request.dto';
 import { generateUuid } from '@libs/utils/generate-uuid';
 
-export type IJobData<T extends QueueType> = T extends QueueType.CRAWLER_REQUEST
-    ? ArticleListRequestDto
-    : undefined;
+export type IJobData<T extends QueueType> =
+    T extends QueueType.CRAWLER_NAVER_LAND_REQUEST
+        ? ArticleListRequestDto
+        : undefined;
 
 @Injectable()
-export class QueueService {
+export class NaverLandCrawlerQueue {
     constructor(
-        @InjectQueue(QueueType.CRAWLER_REQUEST)
+        @InjectQueue(QueueType.CRAWLER_NAVER_LAND_REQUEST)
         private queue: Queue,
     ) {}
 

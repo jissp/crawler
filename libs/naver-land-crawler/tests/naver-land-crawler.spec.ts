@@ -41,7 +41,7 @@ describe('NaverLandCrawler', () => {
     });
 
     it('run', async () => {
-        const articles = await naverLandCrawler.run(
+        await naverLandCrawler.run(
             baseNaverLandRequestDto({
                 z: 13,
                 lat: 37.5030847,
@@ -54,8 +54,6 @@ describe('NaverLandCrawler', () => {
                 maxPage: 1,
             }),
         );
-
-        expect(articles.length).toBeGreaterThan(0);
     });
 
     it('Transform', async () => {

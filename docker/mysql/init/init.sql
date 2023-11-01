@@ -1,3 +1,51 @@
+create table articles
+(
+    id         bigint unsigned auto_increment
+        primary key,
+    type       enum ('NAVER_LAND', 'AWS_RECENT')  null,
+    no         varchar(50)                        not null,
+    data       json                               null,
+    created_at datetime default CURRENT_TIMESTAMP null,
+    updated_at datetime                           null on update CURRENT_TIMESTAMP
+);
+
+create index articles_no_index
+    on articles (no);
+
+create index articles_type_no_index
+    on articles (type, no);
+
+create table aws_recent_articles
+(
+    id          bigint unsigned auto_increment
+        primary key,
+    guid        varchar(40)                        not null,
+    category    varchar(255)                       null,
+    title       varchar(255)                       not null,
+    description text                               not null,
+    author      varchar(40)                        null,
+    link        varchar(255)                       null,
+    pub_at      datetime                           not null,
+    created_at  datetime default CURRENT_TIMESTAMP null,
+    updated_at  datetime                           null on update CURRENT_TIMESTAMP,
+    constraint aws_recent_articles_guid_uindex
+        unique (guid)
+);
+
+create table coords
+(
+    id         bigint unsigned auto_increment
+        primary key,
+    latitude   decimal(13, 10)                    not null,
+    longitude  decimal(13, 10)                    null,
+    data       json                               null,
+    created_at datetime default CURRENT_TIMESTAMP null,
+    updated_at datetime                           null on update CURRENT_TIMESTAMP
+);
+
+create index coords_latitude_longitude_index
+    on coords (latitude, longitude);
+
 create table naver_land_articles
 (
     id              bigint unsigned auto_increment

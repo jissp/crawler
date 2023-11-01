@@ -1,13 +1,13 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { ArticleListRequestDto } from '@libs/naver-land-client/dtos/article-list.request.dto';
+import { NaverLandCrawlerQueue } from '../queues/naver-land-crawler-queue';
 import { ApiBody, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { QueueService } from '../services/queue.service';
+import { ArticleListRequestDto } from '@libs/naver-land-client/dtos/article-list.request.dto';
 import { QueueType } from '@libs/common/interfaces/queue-type.interface';
 
-@ApiTags('수집')
-@Controller('/v1/collect')
-export class CollectController {
-    constructor(private readonly queueService: QueueService) {}
+@ApiTags('네이버 부동산')
+@Controller('/v1/naver-land')
+export class NaverLandController {
+    constructor(private readonly queueService: NaverLandCrawlerQueue) {}
 
     @ApiOperation({
         description: '부동산 매물 수집을 요청합니다.',
@@ -18,11 +18,12 @@ export class CollectController {
     @ApiResponse({
         status: 200,
     })
-    @Post()
+    @Post('collect')
     public async collect(@Body() dto: ArticleListRequestDto) {
-        const job = await this.queueService.addJob<QueueType.CRAWLER_REQUEST>(
-            dto,
-        );
+        const job =
+            await this.queueService.addJob<QueueType.CRAWLER_NAVER_LAND_REQUEST>(
+                dto,
+            );
 
         return {
             jobId: job.id,

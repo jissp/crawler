@@ -15,6 +15,7 @@ import { uSleep } from '@libs/utils/usleep.util';
 import { INaverLandArticleSchema } from '@libs/naver-land-crawler/interfaces/naver-land-article.schema.interface';
 import { NaverLandCrawlerService } from '@libs/naver-land-crawler/naver-land-crawler.service';
 import { CrawlerService } from '@libs/crawler/services/crawler.service';
+import { TradeType } from '@libs/naver-land-client/interfaces/naver-land.interface';
 
 @Injectable()
 export class NaverLandCrawler extends CrawlerAbstract<CrawlerType.NAVER_LAND> {
@@ -66,6 +67,10 @@ export class NaverLandCrawler extends CrawlerAbstract<CrawlerType.NAVER_LAND> {
         data: CrawlerParseResponse<CrawlerType.NAVER_LAND>,
     ): Partial<INaverLandArticleSchema> {
         const [floor, maxFloor] = this.transformFloor(data.flrInfo);
+        const spcPrice =
+            data.tradTpCd === TradeType.매매 && data.spc2 > 0
+                ? data.prc / data.spc2
+                : null;
 
         return {
             articleNo: data.atclNo,
@@ -77,7 +82,7 @@ export class NaverLandCrawler extends CrawlerAbstract<CrawlerType.NAVER_LAND> {
             spc1: data.spc1,
             spc2: data.spc2,
             spcRatio: (data.spc2 / data.spc1) * 100,
-            spcPrice: data.spc2 > 0 ? data.prc / data.spc2 : 0,
+            spcPrice,
             roomCount: this.transformRoomCount(data),
             completionYear: this.transformCompletionYear(data),
             floor: floor ? Number(floor) : null,
