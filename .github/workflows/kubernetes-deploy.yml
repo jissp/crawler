@@ -1,4 +1,4 @@
-name: f-letter-docker-build
+name: kubernetes-deploy
 
 on:
 #  push:
@@ -16,11 +16,8 @@ on:
         # Input has to be provided for the workflow to run
         required: true
 
-
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -31,27 +28,10 @@ jobs:
         registry: ghcr.io
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.PACKAGESTOKEN }}
-    - name: Build and push (PHP-FPM Base)
+    - name: Build and push (Crawler)
       uses: docker/build-push-action@v2
       with:
         context: .
-        file: docker/production/php-fpm/Dockerfile
-        platforms: linux/amd64
+        file: docker/Dockerfile
         push: true
-        tags: ghcr.io/${{ github.repository_owner }}/f-letter-api/php-fpm:latest
-    - name: Build and push (PHP-FPM Scheduler)
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        file: docker/production/php-scheduler/Dockerfile
-        platforms: linux/amd64
-        push: true
-        tags: ghcr.io/${{ github.repository_owner }}/f-letter-api/php-scheduler:latest
-    - name: Build and push (PHP-FPM Worker)
-      uses: docker/build-push-action@v2
-      with:
-        context: .
-        file: docker/production/php-worker/Dockerfile
-        platforms: linux/amd64
-        push: true
-        tags: ghcr.io/${{ github.repository_owner }}/f-letter-api/php-worker:latest
+        tags: ghcr.io/${{ github.repository_owner }}/crawler/crawler-node:latest

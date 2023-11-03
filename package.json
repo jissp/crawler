@@ -7,7 +7,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "build:crawler": "nest build ./apps/crawler",
-    "start:crawler:local": "dotenv -e ./apps/crawler/env/.env nest start crawler --watch"
+    "start:crawler:local": "dotenv -e ./apps/crawler/env/.env nest start crawler --watch",
+    "start:crawler:production": "NODE_ENV=production PM2_KILL_SIGNAL=SIGTERM PM2_KILL_TIMEOUT=5000 pm2-runtime dist/apps/crawler/apps/crawler/src/main.js --name crawler"
   },
   "dependencies": {
     "@nestjs/axios": "^3.0.0",
