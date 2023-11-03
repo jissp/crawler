@@ -28,10 +28,10 @@ jobs:
         registry: ghcr.io
         username: ${{ github.actor }}
         password: ${{ secrets.PACKAGESTOKEN }}
-#    - name: Build and push (Crawler)
-#      uses: docker/build-push-action@v3
-#      with:
-#        context: .
-#        file: docker/Dockerfile
-#        push: true
-#        tags: ghcr.io/${{ github.repository_owner }}/crawler/crawler-node:latest
+    - name: Build and push (Crawler)
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        file: docker/Dockerfile
+        push: true
+        tags: ghcr.io/${{ github.repository_owner }}/crawler/crawler-node:latest
