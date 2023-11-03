@@ -26,7 +26,7 @@ jobs:
       uses: docker/login-action@v3
       with:
         registry: ghcr.io
-        username: ${{ github.DOCKER_USERNAME }}
+        username: ${{ github.actor }}
         password: ${{ secrets.PACKAGESTOKEN }}
 #    - name: Build and push (Crawler)
 #      uses: docker/build-push-action@v3
