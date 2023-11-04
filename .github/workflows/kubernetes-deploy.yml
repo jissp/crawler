@@ -1,19 +1,11 @@
 name: kubernetes-deploy
 
 on:
-  #  push:
-  #    branches: [ "main" ]
-  #  pull_request:
-  #    branches: [ "main" ]
   workflow_dispatch:
-    # Inputs the workflow accepts.
     inputs:
       name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Manual Deploy'
-        # Default value if no value is explicitly provided
-        default: 'ManualDeploy'
-        # Input has to be provided for the workflow to run
+        description: 'Deployment Reason'
+        default: ''
         required: true
 
 jobs:
