@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       name:
-        description: 'Deployment Reason'
+        description: 'Deploy Reason'
 
 jobs:
   build:
