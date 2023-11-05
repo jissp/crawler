@@ -8,11 +8,11 @@ import * as process from 'process';
         {
             provide: ConfigService,
             useFactory: () => {
-                if (process.env['NODE_ENV'] === 'local') {
+                // if (process.env['NODE_ENV'] === 'local') {
                     return new ConfigLocalService();
-                } else {
-                    return new ConfigService();
-                }
+                // } else {
+                //     return new ConfigService();
+                // }
             },
         },
     ],
