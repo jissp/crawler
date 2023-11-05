@@ -4,24 +4,27 @@ on:
   workflow_dispatch:
     inputs:
       name:
-        description: 'Deployment Reason'
-        default: ''
-        required: true
+        description: 'Deploy Reason'
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+      # Repository Checkout
       - uses: actions/checkout@v3
+
+      # Docker Hub login
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.PACKAGESTOKEN }}
+
+        # Build and push (Crawler)
       - name: Build and push (Crawler)
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v5
         with:
           context: .
           file: docker/Dockerfile
