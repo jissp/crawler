@@ -7,9 +7,10 @@ import { BullModule } from '@nestjs/bull';
 import { CrawlerNaverLandRequestConsumer } from './consumers/crawler-naver-land-request.consumer';
 import { NaverLandCrawlerModule } from '@libs/naver-land-crawler/naver-land-crawler.module';
 import { NaverLandCrawlerQueue } from './queues/naver-land-crawler-queue';
-import { NaverLandController } from './controllers/naver-land.controller';
+import { NaverLandController } from './controllers/naver-land/naver-land.controller';
 import { AwsRecentController } from './controllers/aws-recent.controller';
 import { AwsRecentCrawlerModule } from '@libs/aws-recent-crawler/aws-recent-crawler.module';
+import { NaverLandMetaController } from './controllers/naver-land/naver-land-meta.controller';
 
 const QueueProviders = [NaverLandCrawlerQueue];
 const ConsumerProviders = [CrawlerNaverLandRequestConsumer];
@@ -36,6 +37,6 @@ const ConsumerProviders = [CrawlerNaverLandRequestConsumer];
         AwsRecentCrawlerModule,
     ],
     providers: [...QueueProviders, ...ConsumerProviders],
-    controllers: [NaverLandController, AwsRecentController],
+    controllers: [NaverLandMetaController, NaverLandController, AwsRecentController],
 })
 export class CrawlerAppModule {}
