@@ -1,7 +1,10 @@
 import { TradeType } from '@libs/naver-land-client/interfaces/naver-land.interface';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { RealEstateTypeName } from '@libs/naver-land-client/interfaces/article.interface';
-import { IsEnum, IsNumber, IsOptional } from 'class-validator';
+import {
+    Direction,
+    RealEstateTypeName,
+} from '@libs/naver-land-client/interfaces/article.interface';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class SearchNaverLandRequestDto {
@@ -79,6 +82,66 @@ export class SearchNaverLandRequestDto {
     @IsNumber()
     @IsOptional()
     roomCountMax?: number;
+
+    @ApiPropertyOptional({
+        type: String,
+        description: '지역1',
+        example: '서울',
+    })
+    @IsString()
+    @IsOptional()
+    region1?: string;
+
+    @ApiPropertyOptional({
+        type: String,
+        description: '지역2',
+        example: '강남구',
+    })
+    @IsString()
+    @IsOptional()
+    region2?: string;
+
+    @ApiPropertyOptional({
+        type: String,
+        description: '지역3',
+        example: '역삼동',
+    })
+    @IsString()
+    @IsOptional()
+    region3?: string;
+
+    @ApiPropertyOptional({
+        type: String,
+        isArray: true,
+        description: '방향',
+        enum: Direction,
+        example: [Direction.남향, Direction.남동향],
+    })
+    @IsString({
+        each: true,
+    })
+    @IsOptional()
+    direction?: Direction[];
+
+    @ApiPropertyOptional({
+        type: Number,
+        description: '사용승인일(최소)',
+        example: 2,
+    })
+    @Type(() => Number)
+    @IsNumber()
+    @IsOptional()
+    completionYearMin?: number;
+
+    @ApiPropertyOptional({
+        type: Number,
+        description: '사용승인일(최대)',
+        example: 30,
+    })
+    @Type(() => Number)
+    @IsNumber()
+    @IsOptional()
+    completionYearMax?: number;
 
     @ApiProperty({
         type: Number,

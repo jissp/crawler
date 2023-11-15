@@ -143,6 +143,50 @@ export class NaverLandCrawlerService {
             });
         }
 
+        if (dto.completionYearMin && dto.completionYearMax) {
+            builder.andWhere({
+                completionYear: Between(
+                    dto.completionYearMin,
+                    dto.completionYearMax,
+                ),
+            });
+        } else if (dto.completionYearMin) {
+            builder.andWhere({
+                completionYear: Min(dto.completionYearMin),
+            });
+        } else if (dto.completionYearMax) {
+            builder.andWhere({
+                completionYear: Max(dto.completionYearMin),
+            });
+        }
+
+        if (dto.region1) {
+            builder.andWhere({
+                region1: dto.region1,
+            });
+        }
+
+        if (dto.region2) {
+            builder.andWhere({
+                region2: dto.region2,
+            });
+        }
+
+        if (dto.region3) {
+            builder.andWhere({
+                region3: dto.region3,
+            });
+        }
+
+        if (dto.direction) {
+            builder.andWhere({
+                direction:
+                    typeof dto.direction === 'string'
+                        ? dto.direction
+                        : In(dto.direction),
+            });
+        }
+
         return builder;
     }
 }
