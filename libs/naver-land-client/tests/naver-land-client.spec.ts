@@ -1,6 +1,6 @@
 import { Test } from '@nestjs/testing';
 import { NaverLandClientModule } from '@libs/naver-land-client/naver-land-client.module';
-import { NaverLandClient } from '@libs/naver-land-client/naver-land.client';
+import { NaverLandClient } from '@libs/naver-land-client/clients/naver-land.client';
 import { baseNaverLandRequestDto } from '@libs/naver-land-client/tests/test.util';
 
 describe('NaverLandClient', () => {
@@ -26,6 +26,8 @@ describe('NaverLandClient', () => {
                 rgt: 127.1616429,
             }),
         );
+
+        console.log(response.body);
 
         expect(response.code).toBe('success');
         expect(response.body.length).toBeGreaterThan(0);
