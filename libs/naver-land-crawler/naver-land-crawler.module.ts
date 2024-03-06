@@ -1,20 +1,37 @@
 import { Module } from '@nestjs/common';
-import { NaverLandCrawler } from '@libs/naver-land-crawler/naver-land.crawler';
+import { BullModule } from '@nestjs/bull';
 import { NaverLandClientModule } from '@libs/naver-land-client/naver-land-client.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { NaverLandArticle } from '@libs/naver-land-crawler/schemas/naver-land-article.schema';
-import { NaverLandCrawlerService } from '@libs/naver-land-crawler/naver-land-crawler.service';
 import { Coord2addressModule } from '@libs/coord2address/coord2address.module';
-import { CrawlerModule } from '@libs/crawler/crawler.module';
+import { NaverLandTransformer } from '@libs/naver-land-crawler/naver-land.transformer';
+import { NaverLandCrawlerQueueType } from '@libs/naver-land-crawler/interfaces/queue.interface';
+import {
+    ArticleTransformProcessor,
+    GetNaverLandArticleProcessor,
+} from '@libs/naver-land-crawler/processors';
+import { NaverLandCrawlerQueueService } from '@libs/naver-land-crawler/services';
+import { NaverLandModule } from '@libs/naver-land/naver-land.module';
+
+const processors = [GetNaverLandArticleProcessor, ArticleTransformProcessor];
 
 @Module({
     imports: [
-        TypeOrmModule.forFeature([NaverLandArticle]),
-        NaverLandClientModule,
-        CrawlerModule,
+        BullModule.registerQueue(
+            {
+                name: NaverLandCrawlerQueueType.RequestArticle,
+            },
+            {
+                name: NaverLandCrawlerQueueType.TransformArticle,
+            },
+        ),
         Coord2addressModule,
+        NaverLandClientModule,
+        NaverLandModule,
     ],
-    providers: [NaverLandCrawler, NaverLandCrawlerService],
-    exports: [NaverLandCrawler, NaverLandCrawlerService],
+    providers: [
+        ...processors,
+        NaverLandCrawlerQueueService,
+        NaverLandTransformer,
+    ],
+    exports: [NaverLandCrawlerQueueService],
 })
 export class NaverLandCrawlerModule {}

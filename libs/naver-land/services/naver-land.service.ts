@@ -1,29 +1,37 @@
 import { Injectable } from '@nestjs/common';
+import { SearchNaverLandRequestDto } from '../../../apps/crawler/src/app/controllers/naver-land/dtos/search-naver-land.request.dto';
+import { INaverLandArticle } from '@libs/naver-land/interfaces/naver-land-article.interface';
+import { NaverLandArticle } from '@libs/naver-land/schemas/naver-land-article.schema';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, In, Repository } from 'typeorm';
-import { INaverLandArticleSchema } from '@libs/naver-land-crawler/interfaces/naver-land-article.schema.interface';
-import * as _ from 'lodash';
-import { NaverLandArticle } from '@libs/naver-land-crawler/schemas/naver-land-article.schema';
-import { Coord2addressService } from '@libs/coord2address/services/coord2address.service';
-import { SearchNaverLandRequestDto } from '../../apps/crawler/src/app/controllers/naver-land/dtos/search-naver-land.request.dto';
 import { Max, Min } from 'class-validator';
 
 @Injectable()
-export class NaverLandCrawlerService {
+export class NaverLandService {
     constructor(
-        private readonly coord2addressService: Coord2addressService,
         @InjectRepository(NaverLandArticle)
         private readonly naverLandArticleRepository: Repository<NaverLandArticle>,
     ) {}
 
+    /**
+     *
+     */
     public async findAll() {
         return this.naverLandArticleRepository.find();
     }
 
+    /**
+     *
+     * @param dto
+     */
     public async countByDto(dto: SearchNaverLandRequestDto) {
         return this.createBuilderByDto(dto).getCount();
     }
 
+    /**
+     *
+     * @param dto
+     */
     public async search(dto: SearchNaverLandRequestDto) {
         return this.createBuilderByDto(dto)
             .offset((dto.page - 1) * dto.pageSize)
@@ -32,54 +40,54 @@ export class NaverLandCrawlerService {
             .getMany();
     }
 
+    /**
+     *
+     * @param id
+     */
     public async findOneById(id: number) {
         return this.naverLandArticleRepository.findOneBy({
             id,
         });
     }
 
-    public async findOneByArticleNo(articleNo: string) {
+    /**
+     *
+     * @param articleNo
+     */
+    public async findOneByArticleNo(
+        articleNo: string,
+    ): Promise<NaverLandArticle | null> {
         return this.naverLandArticleRepository.findOneBy({
             articleNo,
         });
     }
 
-    public async save(naverLandArticle: Partial<INaverLandArticleSchema>) {
-        let _naverLandArticle =
-            (await this.findOneByArticleNo(naverLandArticle.articleNo)) ??
-            new NaverLandArticle();
+    /**
+     *
+     * @param naverLandArticle
+     */
+    public async upsert(naverLandArticle: Partial<INaverLandArticle>) {
+        let oriArticle =
+            (await this.naverLandArticleRepository.findOneBy({
+                articleNo: naverLandArticle.articleNo,
+            })) || new NaverLandArticle();
 
-        _naverLandArticle = _.merge(_naverLandArticle, naverLandArticle);
+        oriArticle = Object.assign(oriArticle, naverLandArticle);
 
-        if (!_naverLandArticle.address) {
-            const coord = await this.coord2addressService.getAddressByCoord({
-                lat: _naverLandArticle.lat,
-                lng: _naverLandArticle.lng,
-            });
+        return this.naverLandArticleRepository.save(oriArticle);
 
-            _naverLandArticle.region1 = coord.data.address.region_1depth_name;
-            _naverLandArticle.region2 = coord.data.address.region_2depth_name;
-            _naverLandArticle.region3 = coord.data.address.region_3depth_name;
-            _naverLandArticle.address = coord.data.address.address_name;
-        }
-
-        return this.naverLandArticleRepository.save(_naverLandArticle);
+        // return this.naverLandArticleRepository.upsert(naverLandArticle, {
+        //     upsertType: 'on-duplicate-key-update',
+        //     conflictPaths: ['articleNo'],
+        //     skipUpdateIfNoValuesChanged: true,
+        // });
     }
 
-    public async getRegionList() {
-        const builder = this.naverLandArticleRepository.createQueryBuilder();
-
-        return builder
-            .select('region1, region2, region3')
-            .distinct(true)
-            .getRawMany<{
-                region1: string;
-                region2: string;
-                region3: string;
-            }>()
-            .then((result) => result.map((region) => region));
-    }
-
+    /**
+     *
+     * @param dto
+     * @private
+     */
     private createBuilderByDto(dto: SearchNaverLandRequestDto) {
         const builder = this.naverLandArticleRepository.createQueryBuilder();
 
