@@ -1,8 +1,11 @@
 import { Module } from '@nestjs/common';
-import { NaverLandClient } from '@libs/naver-land-client/naver-land.client';
+import {
+    NaverLandClient,
+    NaverLandFinClient,
+} from '@libs/naver-land-client/clients';
 
 @Module({
-    providers: [NaverLandClient],
-    exports: [NaverLandClient],
+    providers: [NaverLandClient, NaverLandFinClient],
+    exports: [NaverLandClient, NaverLandFinClient],
 })
 export class NaverLandClientModule {}

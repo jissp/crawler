@@ -1,11 +1,11 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 import {
     ParkingTag,
     RealEstateType,
     Tag,
     TradeType,
 } from '@libs/naver-land-client/interfaces/naver-land.interface';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class ArticleListRequestDto {
     @ApiPropertyOptional({

@@ -1,4 +1,4 @@
-import { ArticleListRequestDto } from '@libs/naver-land-client/dtos/article-list.request.dto';
+import { ArticleListRequestDto } from '@libs/naver-land-client/clients/dtos/article-list.request.dto';
 import {
     HouseHoldTag,
     ParkingTag,

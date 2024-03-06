@@ -10,12 +10,11 @@ import {
     RealEstateTypeName,
 } from '@libs/naver-land-client/interfaces/article.interface';
 import { TradeType } from '@libs/naver-land-client/interfaces/naver-land.interface';
-import { INaverLandArticleSchema } from '@libs/naver-land-crawler/interfaces/naver-land-article.schema.interface';
 
 @Entity({
     name: 'naver_land_articles',
 })
-export class NaverLandArticle implements INaverLandArticleSchema {
+export class NaverLandArticle {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -47,25 +46,25 @@ export class NaverLandArticle implements INaverLandArticleSchema {
         type: 'varchar',
         length: 20,
     })
-    region1: string;
+    region1?: string | null;
 
     @Column({
         type: 'varchar',
         length: 20,
     })
-    region2: string;
+    region2?: string | null;
 
     @Column({
         type: 'varchar',
         length: 20,
     })
-    region3: string;
+    region3?: string | null;
 
     @Column({
         type: 'varchar',
         length: 500,
     })
-    address: string;
+    address?: string | null;
 
     @Column({
         type: 'integer',
@@ -79,6 +78,13 @@ export class NaverLandArticle implements INaverLandArticleSchema {
         nullable: true,
     })
     rentPrice?: number;
+
+    @Column({
+        type: 'integer',
+        unsigned: true,
+        nullable: true,
+    })
+    transRentPrice?: number;
 
     @Column({
         type: 'decimal',
@@ -109,6 +115,11 @@ export class NaverLandArticle implements INaverLandArticleSchema {
     spcPrice: number;
 
     @Column({
+        type: 'boolean',
+    })
+    isDuplex!: 'Y' | 'N';
+
+    @Column({
         type: 'tinyint',
         unsigned: true,
     })
@@ -118,13 +129,13 @@ export class NaverLandArticle implements INaverLandArticleSchema {
         type: 'tinyint',
         unsigned: true,
     })
-    floor!: number;
+    floor?: number | null;
 
     @Column({
         type: 'tinyint',
         unsigned: true,
     })
-    maxFloor!: number;
+    maxFloor?: number | null;
 
     @Column({
         type: 'enum',
@@ -152,6 +163,11 @@ export class NaverLandArticle implements INaverLandArticleSchema {
     })
     lng!: number;
 
+    @Column({
+        type: 'json',
+    })
+    tags?: string[];
+
     @CreateDateColumn({
         type: 'timestamp',
         default: () => 'CURRENT_TIMESTAMP',
@@ -163,5 +179,5 @@ export class NaverLandArticle implements INaverLandArticleSchema {
         default: null,
         onUpdate: 'CURRENT_TIMESTAMP',
     })
-    updatedAt!: Date | null;
+    updatedAt?: Date | null;
 }
