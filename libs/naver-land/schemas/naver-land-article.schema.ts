@@ -126,6 +126,25 @@ export class NaverLandArticle {
     roomCount!: number;
 
     @Column({
+        type: 'integer',
+        unsigned: true,
+    })
+    parkingCount?: number;
+
+    @Column({
+        type: 'decimal',
+        precision: 5,
+        scale: 2,
+    })
+    parkingRatio?: number;
+
+    @Column({
+        type: 'integer',
+        unsigned: true,
+    })
+    household?: number;
+
+    @Column({
         type: 'tinyint',
         unsigned: true,
     })
