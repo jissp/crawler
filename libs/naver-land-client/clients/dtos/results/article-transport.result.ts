@@ -1,3 +1,8 @@
+export interface ArticleTransportResult {
+    busList: BusItem[];
+    subwayList: SubWayItem[];
+}
+
 export interface BusItem {
     typeName: string;
     typeColor: string;
@@ -15,12 +20,4 @@ export interface SubWayType {
     color: string;
     walkingDistance: number;
     walkingDuration: number;
-}
-
-export interface ArticleTransportResponseDto {
-    isSuccess: true;
-    result: {
-        busList: BusItem[];
-        subwayList: SubWayItem[];
-    };
 }
