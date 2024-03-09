@@ -359,3 +359,8 @@ export enum DirectionTag {
     /** 남서 */
     WESTSOUTH = 'WESTSOUTH',
 }
+
+export interface NaverLandArticleCoordinates {
+    ycoordinate: number;
+    xcoordinate: number;
+}

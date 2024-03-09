@@ -1,6 +1,6 @@
 create table articles
 (
-    id         bigint unsigned auto_increment
+    id         int unsigned auto_increment
         primary key,
     type       enum ('NAVER_LAND', 'AWS_RECENT')    null,
     no         varchar(50)                          not null,
@@ -17,7 +17,7 @@ create index articles_type_no_index
 
 create table aws_recent_articles
 (
-    id          bigint unsigned auto_increment
+    id          int unsigned auto_increment
         primary key,
     guid        varchar(40)                          not null,
     category    varchar(255)                         null,
@@ -34,7 +34,7 @@ create table aws_recent_articles
 
 create table coords
 (
-    id         bigint unsigned auto_increment
+    id         int unsigned auto_increment
         primary key,
     latitude   decimal(13, 10)                      not null,
     longitude  decimal(13, 10)                      null,
@@ -45,6 +45,20 @@ create table coords
 
 create index coords_latitude_longitude_index
     on coords (latitude, longitude);
+
+create table naver_land_article_basic_infos
+(
+    id               int unsigned auto_increment
+        primary key,
+    article_no       varchar(50)                          not null,
+    real_estate_type varchar(10)                          not null,
+    trade_type       varchar(10)                          not null,
+    data             longtext collate utf8mb4_bin         null,
+    created_at       datetime default current_timestamp() not null
+);
+
+create index naver_land_article_basic_infos_article_no_index
+    on naver_land_article_basic_infos (article_no, real_estate_type, trade_type);
 
 create table naver_land_article_transports
 (
@@ -57,7 +71,7 @@ create table naver_land_article_transports
 
 create table naver_land_articles
 (
-    id               bigint unsigned auto_increment
+    id               int unsigned auto_increment
         primary key,
     article_no       varchar(50)                                                                                                                                              not null,
     atcl_nm          varchar(255)                                                                                                                                             not null,
