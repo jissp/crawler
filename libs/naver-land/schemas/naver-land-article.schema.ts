@@ -168,6 +168,11 @@ export class NaverLandArticle {
     })
     tags?: string[];
 
+    @Column({
+        type: 'text',
+    })
+    desc?: string;
+
     @CreateDateColumn({
         type: 'timestamp',
         default: () => 'CURRENT_TIMESTAMP',

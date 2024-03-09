@@ -35,6 +35,7 @@ export class NaverLandTransformer {
         naverLandArticle.rletTpNm =
             article.rletTpNm as Article.RealEstateTypeName;
         naverLandArticle.tradTpCd = article.tradTpCd;
+        naverLandArticle.desc = article.atclFetrDesc;
     }
 
     /**

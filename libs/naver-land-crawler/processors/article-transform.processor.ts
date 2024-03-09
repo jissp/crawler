@@ -44,11 +44,6 @@ export class ArticleTransformProcessor {
         }
 
         await this.naverLandService.upsert(toArticle);
-
-        // await this.queueService.addJob(
-        //     NaverLandCrawlerQueueType.ArticleTransport,
-        //     toArticle,
-        // );
     }
 
     @OnQueueCompleted()
