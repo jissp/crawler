@@ -34,7 +34,7 @@ export class ArticleTransformProcessor {
 
         const articleKey = await this.keyService.findOneBy(article.atclNo);
         const articleComplex = await this.complexService.findByComplexNo(
-            articleKey.data.key.complexNumber,
+            articleKey?.data.key.complexNumber,
         );
         const articleBasicInfo = await this.basicInfoService.findOneBy({
             articleNo: article.atclNo,
