@@ -8,6 +8,7 @@ import {
     ArticleDevelopmentResult,
     ArticleTransportResult,
 } from '@libs/naver-land-client/clients/dtos/results';
+import { ArticleKeyResult } from '@libs/naver-land-client/clients/dtos/results/article-key.result';
 
 @Injectable()
 export class NaverLandFinClient {
@@ -17,6 +18,24 @@ export class NaverLandFinClient {
         this.client = axios.create({
             baseURL: 'https://fin.land.naver.com',
         });
+    }
+
+    /**
+     *
+     * @param articleNo
+     */
+    public async getArticleKey(
+        articleNo: string,
+    ): Promise<NaverLandResponseDto<ArticleKeyResult>> {
+        const response = await this.client.get<
+            NaverLandResponseDto<ArticleKeyResult>
+        >('/front-api/v1/article/key', {
+            params: {
+                articleId: articleNo,
+            },
+        });
+
+        return response.data;
     }
 
     /**
@@ -43,7 +62,7 @@ export class NaverLandFinClient {
      * @param complexNo
      */
     public async getArticleComplex(
-        complexNo: string,
+        complexNo: number,
     ): Promise<NaverLandResponseDto<ArticleComplexResult>> {
         const response = await this.client.get<
             NaverLandResponseDto<ArticleComplexResult>
@@ -58,16 +77,16 @@ export class NaverLandFinClient {
 
     /**
      * 네이버 매물의 기본 정보 조회
-     * @param articleId
+     * @param articleNo
      * @param realEstateType
      * @param tradeType
      */
     public async getArticleBasicInfo({
-        articleId,
+        articleNo,
         realEstateType,
         tradeType,
     }: {
-        articleId: number;
+        articleNo: string;
         realEstateType: string;
         tradeType: TradeType;
     }): Promise<NaverLandResponseDto<ArticleBasicInfoResult>> {
@@ -75,7 +94,7 @@ export class NaverLandFinClient {
             NaverLandResponseDto<ArticleBasicInfoResult>
         >('/front-api/v1/article/basicInfo', {
             params: {
-                articleId,
+                articleId: articleNo,
                 realEstateType,
                 tradeType,
             },
@@ -86,16 +105,16 @@ export class NaverLandFinClient {
 
     /**
      * 네이버 매물의 주변 개발 정보
-     * @param articleId
+     * @param articleNo
      */
     public async getArticleDevelopment(
-        articleId: number,
+        articleNo: number,
     ): Promise<NaverLandResponseDto<ArticleDevelopmentResult>> {
         const response = await this.client.get<
             NaverLandResponseDto<ArticleDevelopmentResult>
         >('/front-api/v1/article/development', {
             params: {
-                articleId,
+                articleId: articleNo,
             },
         });
 

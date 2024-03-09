@@ -10,6 +10,11 @@ import { Coord2addressService } from '@libs/coord2address/services/coord2address
 import { NaverLandTransformer } from '@libs/naver-land-crawler/naver-land.transformer';
 import { NaverLandService } from '@libs/naver-land/services/naver-land.service';
 import { NaverLandCrawlerQueueType } from '@libs/naver-land-crawler/interfaces/queue.interface';
+import {
+    NaverLandArticleKeyService,
+    NaverLandBasicInfoService,
+    NaverLandComplexService,
+} from '@libs/naver-land/services';
 
 type JobData = IArticle;
 
@@ -17,19 +22,36 @@ type JobData = IArticle;
 export class ArticleTransformProcessor {
     constructor(
         private readonly naverLandService: NaverLandService,
+        private readonly keyService: NaverLandArticleKeyService,
+        private readonly complexService: NaverLandComplexService,
+        private readonly basicInfoService: NaverLandBasicInfoService,
         private readonly coord2addressService: Coord2addressService,
-        private readonly transformer: NaverLandTransformer,
     ) {}
 
     @Process()
     async onProcess(job: Job<JobData>) {
         const { ...article } = job.data;
 
-        const toArticle = this.transformer.transform(article);
+        const articleKey = await this.keyService.findOneBy(article.atclNo);
+        const articleComplex = await this.complexService.findByComplexNo(
+            articleKey.data.key.complexNumber,
+        );
+        const articleBasicInfo = await this.basicInfoService.findOneBy({
+            articleNo: article.atclNo,
+            realEstateType: article.rletTpCd,
+            tradeType: article.tradTpCd,
+        });
+
+        const transformer = new NaverLandTransformer(
+            article,
+            articleComplex?.data,
+            articleBasicInfo?.data,
+        );
+        const toArticle = transformer.transform();
+
         const oriArticle = await this.naverLandService.findOneByArticleNo(
             toArticle.articleNo,
         );
-
         if (!oriArticle || !oriArticle.address) {
             const addressByCoord =
                 await this.coord2addressService.getAddressByCoord({
@@ -37,10 +59,7 @@ export class ArticleTransformProcessor {
                     lng: article.lng,
                 });
 
-            this.transformer.buildArticleAddressBy(
-                toArticle,
-                addressByCoord.data,
-            );
+            transformer.buildArticleAddressBy(toArticle, addressByCoord.data);
         }
 
         await this.naverLandService.upsert(toArticle);
