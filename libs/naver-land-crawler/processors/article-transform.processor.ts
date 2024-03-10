@@ -10,11 +10,8 @@ import { Coord2addressService } from '@libs/coord2address/services/coord2address
 import { NaverLandTransformer } from '@libs/naver-land-crawler/naver-land.transformer';
 import { NaverLandService } from '@libs/naver-land/services/naver-land.service';
 import { NaverLandCrawlerQueueType } from '@libs/naver-land-crawler/interfaces/queue.interface';
-import {
-    NaverLandArticleKeyService,
-    NaverLandBasicInfoService,
-    NaverLandComplexService,
-} from '@libs/naver-land/services';
+import { NaverLandArticleAdditionalInfoService } from '@libs/naver-land/services';
+import { NaverLandArticleAdditionalInfoType } from '@libs/naver-land/interfaces/naver-land-article-additional-info.interface';
 
 type JobData = IArticle;
 
@@ -22,9 +19,7 @@ type JobData = IArticle;
 export class ArticleTransformProcessor {
     constructor(
         private readonly naverLandService: NaverLandService,
-        private readonly keyService: NaverLandArticleKeyService,
-        private readonly complexService: NaverLandComplexService,
-        private readonly basicInfoService: NaverLandBasicInfoService,
+        private readonly additionalInfoService: NaverLandArticleAdditionalInfoService,
         private readonly coord2addressService: Coord2addressService,
     ) {}
 
@@ -32,15 +27,32 @@ export class ArticleTransformProcessor {
     async onProcess(job: Job<JobData>) {
         const { ...article } = job.data;
 
-        const articleKey = await this.keyService.findOneBy(article.atclNo);
-        const articleComplex = await this.complexService.findByComplexNo(
-            articleKey?.data.key.complexNumber,
-        );
-        const articleBasicInfo = await this.basicInfoService.findOneBy({
-            articleNo: article.atclNo,
-            realEstateType: article.rletTpCd,
-            tradeType: article.tradTpCd,
-        });
+        const articleKey =
+            await this.additionalInfoService.findOneByKey<NaverLandArticleAdditionalInfoType.KeyInfo>(
+                {
+                    type: NaverLandArticleAdditionalInfoType.KeyInfo,
+                    key: article.atclNo,
+                },
+            );
+        const articleComplex = articleKey?.data.key.complexNumber
+            ? await this.additionalInfoService.findOneByKey<NaverLandArticleAdditionalInfoType.ComplexInfo>(
+                  {
+                      type: NaverLandArticleAdditionalInfoType.ComplexInfo,
+                      key: articleKey.data.key.complexNumber.toString(),
+                  },
+              )
+            : null;
+        const articleBasicInfo =
+            await this.additionalInfoService.findOneByKey<NaverLandArticleAdditionalInfoType.BasicInfo>(
+                {
+                    type: NaverLandArticleAdditionalInfoType.BasicInfo,
+                    key: [
+                        article.atclNo,
+                        article.rletTpCd,
+                        article.tradTpCd,
+                    ].join(':'),
+                },
+            );
 
         const transformer = new NaverLandTransformer(
             article,
