@@ -2,42 +2,21 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
     NaverLandArticle,
-    NaverLandArticleBasicInfo,
-    NaverLandArticleComplex,
-    NaverLandArticleKey,
-    NaverLandArticleTransport,
+    NaverLandArticleAdditionalInfo,
 } from '@libs/naver-land/schemas';
 import {
-    NaverLandArticleKeyService,
-    NaverLandBasicInfoService,
-    NaverLandComplexService,
+    NaverLandArticleAdditionalInfoService,
     NaverLandService,
-    NaverLandTransportService,
 } from '@libs/naver-land/services';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([
-            NaverLandArticleKey,
-            NaverLandArticleBasicInfo,
-            NaverLandArticleComplex,
+            NaverLandArticleAdditionalInfo,
             NaverLandArticle,
-            NaverLandArticleTransport,
         ]),
     ],
-    providers: [
-        NaverLandArticleKeyService,
-        NaverLandBasicInfoService,
-        NaverLandComplexService,
-        NaverLandService,
-        NaverLandTransportService,
-    ],
-    exports: [
-        NaverLandArticleKeyService,
-        NaverLandBasicInfoService,
-        NaverLandComplexService,
-        NaverLandService,
-        NaverLandTransportService,
-    ],
+    providers: [NaverLandArticleAdditionalInfoService, NaverLandService],
+    exports: [NaverLandArticleAdditionalInfoService, NaverLandService],
 })
 export class NaverLandModule {}
