@@ -1,4 +1,9 @@
-import { OnQueueCompleted, Process, Processor } from '@nestjs/bull';
+import {
+    OnQueueCompleted,
+    OnQueueFailed,
+    Process,
+    Processor,
+} from '@nestjs/bull';
 import { Job } from 'bull';
 import { uSleep } from '@libs/utils/usleep.util';
 import { ArticleListRequestDto } from '@libs/naver-land-client/clients/dtos/article-list.request.dto';
@@ -6,20 +11,10 @@ import { NaverLandClient } from '@libs/naver-land-client/clients/naver-land.clie
 import { NaverLandCrawlerQueueType } from '@libs/naver-land-crawler/interfaces/queue.interface';
 import { NaverLandCrawlerQueueService } from '@libs/naver-land-crawler/services/naver-land-crawler-queue.service';
 import { NaverLandFinClient } from '@libs/naver-land-client/clients';
-import {
-    NaverLandArticleKeyService,
-    NaverLandComplexService,
-    NaverLandTransportService,
-} from '@libs/naver-land/services';
-import {
-    NaverLandBasicInfoFindOneFilter,
-    NaverLandBasicInfoService,
-} from '@libs/naver-land/services/naver-land-basic-info.service';
-import { NaverLandArticleKey } from '@libs/naver-land/schemas/naver-land-article-key.schema';
-import {
-    NaverLandArticleBasicInfo,
-    NaverLandArticleComplex,
-} from '@libs/naver-land/schemas';
+import { NaverLandArticleAdditionalInfoService } from '@libs/naver-land/services';
+import { NaverLandArticleAdditionalInfoType } from '@libs/naver-land/interfaces/naver-land-article-additional-info.interface';
+import { NaverLandArticleAdditionalInfo } from '@libs/naver-land/schemas';
+import { TradeType } from '@libs/naver-land-client/interfaces/naver-land.interface';
 
 type JobData = ArticleListRequestDto;
 
@@ -29,10 +24,7 @@ export class GetNaverLandArticleProcessor {
         private readonly client: NaverLandClient,
         private readonly queueService: NaverLandCrawlerQueueService,
         private readonly naverLandFinClient: NaverLandFinClient,
-        private readonly articleKeyService: NaverLandArticleKeyService,
-        private readonly complexService: NaverLandComplexService,
-        private readonly transportService: NaverLandTransportService,
-        private readonly basicInfoService: NaverLandBasicInfoService,
+        private readonly additionalInfoService: NaverLandArticleAdditionalInfoService,
     ) {}
 
     @Process()
@@ -52,15 +44,15 @@ export class GetNaverLandArticleProcessor {
 
             for (const article of articleResponse.body) {
                 const articleKey = await this.collectArticleKey(article.atclNo);
-                if (!articleKey.articleNo) {
+                if (!articleKey.id) {
                     await uSleep(200);
                 }
 
                 if (['아파트', '오피스텔'].includes(article.rletTpNm)) {
                     const articleComplex = await this.collectArticleComplex(
-                        articleKey.data.key.complexNumber,
+                        articleKey.data.key.complexNumber.toString(),
                     );
-                    if (!articleComplex.complexNo) {
+                    if (!articleComplex.id) {
                         await uSleep(200);
                     }
                 }
@@ -70,7 +62,7 @@ export class GetNaverLandArticleProcessor {
                     tradeType: article.tradTpCd,
                     realEstateType: article.rletTpCd,
                 });
-                if (!articleBasicInfo.articleNo) {
+                if (!articleBasicInfo.id) {
                     await uSleep(200);
                 }
 
@@ -93,6 +85,11 @@ export class GetNaverLandArticleProcessor {
         console.log(`${NaverLandCrawlerQueueType.RequestArticle} completed`);
     }
 
+    @OnQueueFailed()
+    async onFailed(job: Job<JobData>, e: any) {
+        console.log(e);
+    }
+
     /**
      *
      * @param articleNo
@@ -100,8 +97,18 @@ export class GetNaverLandArticleProcessor {
      */
     private async collectArticleKey(
         articleNo: string,
-    ): Promise<Partial<NaverLandArticleKey>> {
-        const oriData = await this.articleKeyService.findOneBy(articleNo);
+    ): Promise<
+        Partial<
+            NaverLandArticleAdditionalInfo<NaverLandArticleAdditionalInfoType.KeyInfo>
+        >
+    > {
+        const oriData =
+            await this.additionalInfoService.findOneByKey<NaverLandArticleAdditionalInfoType.KeyInfo>(
+                {
+                    type: NaverLandArticleAdditionalInfoType.KeyInfo,
+                    key: articleNo,
+                },
+            );
         if (oriData) {
             return oriData;
         }
@@ -110,10 +117,13 @@ export class GetNaverLandArticleProcessor {
             articleNo,
         );
 
-        await this.articleKeyService.upsert({
-            articleNo,
-            data: articleKeyResponse.result,
-        });
+        await this.additionalInfoService.upsert<NaverLandArticleAdditionalInfoType.KeyInfo>(
+            {
+                type: NaverLandArticleAdditionalInfoType.KeyInfo,
+                key: articleNo,
+                data: articleKeyResponse.result,
+            },
+        );
 
         return {
             data: articleKeyResponse.result,
@@ -126,9 +136,19 @@ export class GetNaverLandArticleProcessor {
      * @private
      */
     private async collectArticleComplex(
-        complexNo: number,
-    ): Promise<Partial<NaverLandArticleComplex>> {
-        const oriData = await this.complexService.findByComplexNo(complexNo);
+        complexNo: string,
+    ): Promise<
+        Partial<
+            NaverLandArticleAdditionalInfo<NaverLandArticleAdditionalInfoType.ComplexInfo>
+        >
+    > {
+        const oriData =
+            await this.additionalInfoService.findOneByKey<NaverLandArticleAdditionalInfoType.ComplexInfo>(
+                {
+                    type: NaverLandArticleAdditionalInfoType.ComplexInfo,
+                    key: complexNo,
+                },
+            );
         if (oriData) {
             return oriData;
         }
@@ -137,10 +157,13 @@ export class GetNaverLandArticleProcessor {
             complexNo,
         );
 
-        await this.complexService.upsert({
-            complexNo,
-            data: response.result,
-        });
+        await this.additionalInfoService.upsert<NaverLandArticleAdditionalInfoType.ComplexInfo>(
+            {
+                type: NaverLandArticleAdditionalInfoType.ComplexInfo,
+                key: complexNo,
+                data: response.result,
+            },
+        );
 
         return {
             data: response.result,
@@ -152,48 +175,49 @@ export class GetNaverLandArticleProcessor {
      * @param filter
      * @private
      */
-    private async collectBasicInfo(
-        filter: NaverLandBasicInfoFindOneFilter,
-    ): Promise<Partial<NaverLandArticleBasicInfo>> {
-        const oriData = await this.basicInfoService.findOneBy(filter);
+    private async collectBasicInfo({
+        articleNo,
+        tradeType,
+        realEstateType,
+    }: {
+        articleNo: string;
+        tradeType: TradeType;
+        realEstateType: string;
+    }): Promise<
+        Partial<
+            NaverLandArticleAdditionalInfo<NaverLandArticleAdditionalInfoType.BasicInfo>
+        >
+    > {
+        const key = [articleNo, tradeType, realEstateType].join(':');
+
+        const oriData =
+            await this.additionalInfoService.findOneByKey<NaverLandArticleAdditionalInfoType.BasicInfo>(
+                {
+                    type: NaverLandArticleAdditionalInfoType.BasicInfo,
+                    key,
+                },
+            );
         if (oriData) {
             return oriData;
         }
 
         const articleBasicInfo =
-            await this.naverLandFinClient.getArticleBasicInfo(filter);
+            await this.naverLandFinClient.getArticleBasicInfo({
+                articleNo,
+                tradeType,
+                realEstateType,
+            });
 
-        await this.basicInfoService.upsert({
-            ...filter,
-            data: articleBasicInfo.result,
-        });
+        await this.additionalInfoService.upsert<NaverLandArticleAdditionalInfoType.BasicInfo>(
+            {
+                type: NaverLandArticleAdditionalInfoType.BasicInfo,
+                key,
+                data: articleBasicInfo.result,
+            },
+        );
 
         return {
             data: articleBasicInfo.result,
         };
-    }
-
-    /**
-     * @param articleNo
-     * @private
-     */
-    private async collectTransportData(articleNo: string) {
-        const oriTransport = await this.transportService.findByArticleNo(
-            articleNo,
-        );
-        if (oriTransport) {
-            return false;
-        }
-
-        const transport = await this.naverLandFinClient.getArticleTransport(
-            articleNo,
-        );
-
-        await this.transportService.upsert({
-            articleNo,
-            data: transport.result,
-        });
-
-        return true;
     }
 }

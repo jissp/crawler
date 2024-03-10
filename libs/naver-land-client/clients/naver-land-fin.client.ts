@@ -62,7 +62,7 @@ export class NaverLandFinClient {
      * @param complexNo
      */
     public async getArticleComplex(
-        complexNo: number,
+        complexNo: string,
     ): Promise<NaverLandResponseDto<ArticleComplexResult>> {
         const response = await this.client.get<
             NaverLandResponseDto<ArticleComplexResult>

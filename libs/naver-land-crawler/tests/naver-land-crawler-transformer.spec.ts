@@ -1,7 +1,7 @@
-import { NaverLandTransformer } from '@libs/naver-land-crawler/naver-land.transformer';
 import { IArticle } from '@libs/naver-land-client/clients/dtos/article-list.response.dto';
 import { TradeType } from '@libs/naver-land-client/interfaces/naver-land.interface';
 import { Direction } from '@libs/naver-land-client/interfaces/article.interface';
+import { NaverLandTransformer } from '@libs/naver-land-crawler/naver-land.transformer';
 
 const article: IArticle = {
     atclNo: '2410628525',
@@ -55,13 +55,9 @@ const article: IArticle = {
 };
 
 describe('NaverLandCrawler Builder', () => {
-    let naverLandTransformer: NaverLandTransformer;
-    beforeAll(async () => {
-        naverLandTransformer = new NaverLandTransformer();
-    });
-
     it('build', async () => {
-        const result = naverLandTransformer.transform(article);
+        const naverLandTransformer = new NaverLandTransformer(article);
+        const result = naverLandTransformer.transform();
 
         expect(result).toMatchObject({
             articleNo: '2410628525',
