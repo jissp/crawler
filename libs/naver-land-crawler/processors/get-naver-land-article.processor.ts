@@ -48,7 +48,7 @@ export class GetNaverLandArticleProcessor {
                     await uSleep(200);
                 }
 
-                if (['아파트', '오피스텔'].includes(article.rletTpNm)) {
+                if (articleKey.data.key.complexNumber) {
                     const articleComplex = await this.collectArticleComplex(
                         articleKey.data.key.complexNumber.toString(),
                     );
