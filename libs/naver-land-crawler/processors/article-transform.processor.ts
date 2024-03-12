@@ -48,8 +48,8 @@ export class ArticleTransformProcessor {
                     type: NaverLandArticleAdditionalInfoType.BasicInfo,
                     key: [
                         article.atclNo,
-                        article.rletTpCd,
                         article.tradTpCd,
+                        article.rletTpCd,
                     ].join(':'),
                 },
             );
