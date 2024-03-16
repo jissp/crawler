@@ -170,6 +170,22 @@ export class NaverLandArticle {
 
     @Column({
         type: 'decimal',
+        unsigned: true,
+        scale: 8,
+        precision: 2,
+    })
+    floorAreaRatio!: number;
+
+    @Column({
+        type: 'decimal',
+        unsigned: true,
+        scale: 8,
+        precision: 2,
+    })
+    buildingCoverageRatio!: number;
+
+    @Column({
+        type: 'decimal',
         precision: 8,
         scale: 2,
     })

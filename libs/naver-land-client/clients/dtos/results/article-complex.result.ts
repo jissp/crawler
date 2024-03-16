@@ -13,7 +13,7 @@ export class ArticleComplexResult {
     totalHouseholdNumber: number;
     dongCount: number;
     constructionCompany: string;
-    buildingUse: null;
+    buildingUse: string | null;
     isServicedResidence: boolean;
     buildingRatioInfo: {
         floorAreaRatio: number;
