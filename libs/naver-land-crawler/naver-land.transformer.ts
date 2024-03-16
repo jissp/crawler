@@ -79,7 +79,13 @@ export class NaverLandTransformer {
         ) {
             this._naverLandArticle.spcPrice =
                 this.article.prc / this.article.spc2;
-        } else if (this._naverLandArticle.tradTpCd === TradeType.월세) {
+        }
+
+        if (
+            [TradeType.전세, TradeType.월세].includes(
+                this._naverLandArticle.tradTpCd,
+            )
+        ) {
             // 전월세비율 - https://kosis.kr/statHtml/statHtml.do?orgId=408&tblId=DT_30404_N0010
             const transRatio = 5.2;
             const transRentPrice = ((this.article.prc / 100) * transRatio) / 12;
@@ -100,6 +106,7 @@ export class NaverLandTransformer {
         this._naverLandArticle.floor = floor ? Number(floor) : null;
         this._naverLandArticle.maxFloor = maxFloor ? Number(maxFloor) : null;
         this._naverLandArticle.completionYear = this.transformCompletionYear();
+        this.transformBuildingCoverage();
     }
 
     /**
@@ -171,6 +178,21 @@ export class NaverLandTransformer {
                 return 26;
             case Article.CompletionYearTag['30년이상']:
                 return 30;
+        }
+    }
+
+    /**
+     * 용적률 / 건폐율을 변환합니다.
+     *
+     * @private
+     */
+    private transformBuildingCoverage() {
+        if(this.complexResult) {
+            this._naverLandArticle.buildingCoverageRatio = this.complexResult?.buildingRatioInfo.buildingCoverageRatio ?? null;
+            this._naverLandArticle.floorAreaRatio = this.complexResult?.buildingRatioInfo.floorAreaRatio ?? null;
+        } else {
+            this._naverLandArticle.buildingCoverageRatio = this.basicInfoResult?.detailInfo.sizeInfo.buildingCoverageRatio ?? null;
+            this._naverLandArticle.floorAreaRatio = this.basicInfoResult?.detailInfo.sizeInfo.floorAreaRatio ?? null;
         }
     }
 
