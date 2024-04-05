@@ -32,7 +32,7 @@ export class GetNaverLandArticleProcessor {
         const { ...dto } = job.data;
 
         let page = dto.page ?? 1;
-        const maxPage = dto.maxPage ?? 999;
+        const maxPage = dto.maxPage ?? 9999;
 
         while (true) {
             dto.page = page;
