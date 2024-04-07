@@ -57,9 +57,12 @@ export class NaverLandTransformer {
     private buildArticleRoom() {
         this._naverLandArticle.spc1 = this.article.spc1;
         this._naverLandArticle.spc2 = this.article.spc2;
-        this._naverLandArticle.spcRatio =
-            (this.article.spc2 / this.article.spc1) * 100;
-
+        if (this.article.spc1 === 0 || this.article.spc2 === 0) {
+            this._naverLandArticle.spcRatio = 0;
+        } else {
+            this._naverLandArticle.spcRatio =
+                (this.article.spc2 / this.article.spc1) * 100;
+        }
         this._naverLandArticle.isDuplex = this.transformDuplex();
         this._naverLandArticle.roomCount = this.transformRoomCount();
         this._naverLandArticle.direction = this.article.direction;
@@ -93,7 +96,9 @@ export class NaverLandTransformer {
             this._naverLandArticle.transRentPrice =
                 this.article.rentPrc + transRentPrice;
             this._naverLandArticle.spcPrice =
-                this._naverLandArticle.transRentPrice / this.article.spc2;
+                this.article.spc2 === 0
+                    ? 0
+                    : this._naverLandArticle.transRentPrice / this.article.spc2;
         }
     }
 
@@ -187,12 +192,19 @@ export class NaverLandTransformer {
      * @private
      */
     private transformBuildingCoverage() {
-        if(this.complexResult) {
-            this._naverLandArticle.buildingCoverageRatio = this.complexResult?.buildingRatioInfo.buildingCoverageRatio ?? null;
-            this._naverLandArticle.floorAreaRatio = this.complexResult?.buildingRatioInfo.floorAreaRatio ?? null;
+        if (this.complexResult) {
+            this._naverLandArticle.buildingCoverageRatio =
+                this.complexResult?.buildingRatioInfo.buildingCoverageRatio ??
+                null;
+            this._naverLandArticle.floorAreaRatio =
+                this.complexResult?.buildingRatioInfo.floorAreaRatio ?? null;
         } else {
-            this._naverLandArticle.buildingCoverageRatio = this.basicInfoResult?.detailInfo.sizeInfo.buildingCoverageRatio ?? null;
-            this._naverLandArticle.floorAreaRatio = this.basicInfoResult?.detailInfo.sizeInfo.floorAreaRatio ?? null;
+            this._naverLandArticle.buildingCoverageRatio =
+                this.basicInfoResult?.detailInfo.sizeInfo
+                    .buildingCoverageRatio ?? null;
+            this._naverLandArticle.floorAreaRatio =
+                this.basicInfoResult?.detailInfo.sizeInfo.floorAreaRatio ??
+                null;
         }
     }
 

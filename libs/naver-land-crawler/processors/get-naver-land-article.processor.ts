@@ -43,33 +43,37 @@ export class GetNaverLandArticleProcessor {
             }
 
             for (const article of articleResponse.body) {
-                const articleKey = await this.collectArticleKey(article.atclNo);
-                if (!articleKey.id) {
-                    await uSleep(200);
-                }
-
-                if (articleKey.data.key.complexNumber) {
-                    const articleComplex = await this.collectArticleComplex(
-                        articleKey.data.key.complexNumber.toString(),
-                    );
-                    if (!articleComplex.id) {
+                try {
+                    const articleKey = await this.collectArticleKey(article.atclNo);
+                    if (!articleKey.id) {
                         await uSleep(200);
                     }
-                }
 
-                const articleBasicInfo = await this.collectBasicInfo({
-                    articleNo: article.atclNo,
-                    tradeType: article.tradTpCd,
-                    realEstateType: article.rletTpCd,
-                });
-                if (!articleBasicInfo.id) {
-                    await uSleep(200);
-                }
+                    if (articleKey.data.key.complexNumber) {
+                        const articleComplex = await this.collectArticleComplex(
+                            articleKey.data.key.complexNumber.toString(),
+                        );
+                        if (!articleComplex.id) {
+                            await uSleep(200);
+                        }
+                    }
 
-                await this.queueService.addJob<NaverLandCrawlerQueueType.TransformArticle>(
-                    NaverLandCrawlerQueueType.TransformArticle,
-                    article,
-                );
+                    const articleBasicInfo = await this.collectBasicInfo({
+                        articleNo: article.atclNo,
+                        tradeType: article.tradTpCd,
+                        realEstateType: article.rletTpCd,
+                    });
+                    if (!articleBasicInfo.id) {
+                        await uSleep(200);
+                    }
+
+                    await this.queueService.addJob<NaverLandCrawlerQueueType.TransformArticle>(
+                        NaverLandCrawlerQueueType.TransformArticle,
+                        article,
+                    );
+                } catch (error) {
+                    console.error('GetNaverLandArticleProcessor', error);
+                }
             }
 
             if (page++ >= maxPage) {
@@ -82,7 +86,7 @@ export class GetNaverLandArticleProcessor {
 
     @OnQueueCompleted()
     async onCompleted(job: Job<JobData>, result: any) {
-        console.log(`${NaverLandCrawlerQueueType.RequestArticle} completed`);
+        // console.log(`${NaverLandCrawlerQueueType.RequestArticle} completed`);
     }
 
     @OnQueueFailed()
@@ -102,32 +106,35 @@ export class GetNaverLandArticleProcessor {
             NaverLandArticleAdditionalInfo<NaverLandArticleAdditionalInfoType.KeyInfo>
         >
     > {
-        const oriData =
-            await this.additionalInfoService.findOneByKey<NaverLandArticleAdditionalInfoType.KeyInfo>(
+        try {
+            const oriData =
+                await this.additionalInfoService.findOneByKey<NaverLandArticleAdditionalInfoType.KeyInfo>(
+                    {
+                        type: NaverLandArticleAdditionalInfoType.KeyInfo,
+                        key: articleNo,
+                    },
+                );
+            if (oriData) {
+                return oriData;
+            }
+
+            const articleKeyResponse =
+                await this.naverLandFinClient.getArticleKey(articleNo);
+
+            await this.additionalInfoService.upsert<NaverLandArticleAdditionalInfoType.KeyInfo>(
                 {
                     type: NaverLandArticleAdditionalInfoType.KeyInfo,
                     key: articleNo,
+                    data: articleKeyResponse.result,
                 },
             );
-        if (oriData) {
-            return oriData;
-        }
 
-        const articleKeyResponse = await this.naverLandFinClient.getArticleKey(
-            articleNo,
-        );
-
-        await this.additionalInfoService.upsert<NaverLandArticleAdditionalInfoType.KeyInfo>(
-            {
-                type: NaverLandArticleAdditionalInfoType.KeyInfo,
-                key: articleNo,
+            return {
                 data: articleKeyResponse.result,
-            },
-        );
-
-        return {
-            data: articleKeyResponse.result,
-        };
+            };
+        } catch (e) {
+            return null;
+        }
     }
 
     /**
