@@ -73,14 +73,9 @@ export class NaverLandService {
             })) || new NaverLandArticle();
 
         oriArticle = Object.assign(oriArticle, naverLandArticle);
+        oriArticle.updatedAt = new Date();
 
         return this.naverLandArticleRepository.save(oriArticle);
-
-        // return this.naverLandArticleRepository.upsert(naverLandArticle, {
-        //     upsertType: 'on-duplicate-key-update',
-        //     conflictPaths: ['articleNo'],
-        //     skipUpdateIfNoValuesChanged: true,
-        // });
     }
 
     /**

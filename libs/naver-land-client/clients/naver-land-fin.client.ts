@@ -27,15 +27,19 @@ export class NaverLandFinClient {
     public async getArticleKey(
         articleNo: string,
     ): Promise<NaverLandResponseDto<ArticleKeyResult>> {
-        const response = await this.client.get<
-            NaverLandResponseDto<ArticleKeyResult>
-        >('/front-api/v1/article/key', {
-            params: {
-                articleId: articleNo,
-            },
-        });
+        try {
+            const response = await this.client.get<
+                NaverLandResponseDto<ArticleKeyResult>
+            >('/front-api/v1/article/key', {
+                params: {
+                    articleId: articleNo,
+                },
+            });
 
-        return response.data;
+            return response.data;
+        } catch (error) {
+            return null;
+        }
     }
 
     /**
@@ -45,16 +49,20 @@ export class NaverLandFinClient {
     public async getArticleTransport(
         articleNo: string,
     ): Promise<NaverLandResponseDto<ArticleTransportResult>> {
-        const response = await this.client.get<
-            NaverLandResponseDto<ArticleTransportResult>
-        >('/front-api/v1/article/transport', {
-            params: {
-                itemId: articleNo,
-                itemType: 'article',
-            },
-        });
+        try {
+            const response = await this.client.get<
+                NaverLandResponseDto<ArticleTransportResult>
+            >('/front-api/v1/article/transport', {
+                params: {
+                    itemId: articleNo,
+                    itemType: 'article',
+                },
+            });
 
-        return response.data;
+            return response.data;
+        } catch (error) {
+            return null;
+        }
     }
 
     /**
@@ -64,15 +72,19 @@ export class NaverLandFinClient {
     public async getArticleComplex(
         complexNo: string,
     ): Promise<NaverLandResponseDto<ArticleComplexResult>> {
-        const response = await this.client.get<
-            NaverLandResponseDto<ArticleComplexResult>
-        >('/front-api/v1/article/complex', {
-            params: {
-                complexNumber: complexNo,
-            },
-        });
+        try {
+            const response = await this.client.get<
+                NaverLandResponseDto<ArticleComplexResult>
+            >('/front-api/v1/article/complex', {
+                params: {
+                    complexNumber: complexNo,
+                },
+            });
 
-        return response.data;
+            return response.data;
+        } catch (error) {
+            return null;
+        }
     }
 
     /**
@@ -90,17 +102,21 @@ export class NaverLandFinClient {
         realEstateType: string;
         tradeType: TradeType;
     }): Promise<NaverLandResponseDto<ArticleBasicInfoResult>> {
-        const response = await this.client.get<
-            NaverLandResponseDto<ArticleBasicInfoResult>
-        >('/front-api/v1/article/basicInfo', {
-            params: {
-                articleId: articleNo,
-                realEstateType,
-                tradeType,
-            },
-        });
+        try {
+            const response = await this.client.get<
+                NaverLandResponseDto<ArticleBasicInfoResult>
+            >('/front-api/v1/article/basicInfo', {
+                params: {
+                    articleId: articleNo,
+                    realEstateType,
+                    tradeType,
+                },
+            });
 
-        return response.data;
+            return response.data;
+        } catch (error) {
+            return null;
+        }
     }
 
     /**
@@ -110,14 +126,18 @@ export class NaverLandFinClient {
     public async getArticleDevelopment(
         articleNo: number,
     ): Promise<NaverLandResponseDto<ArticleDevelopmentResult>> {
-        const response = await this.client.get<
-            NaverLandResponseDto<ArticleDevelopmentResult>
-        >('/front-api/v1/article/development', {
-            params: {
-                articleId: articleNo,
-            },
-        });
+        try {
+            const response = await this.client.get<
+                NaverLandResponseDto<ArticleDevelopmentResult>
+            >('/front-api/v1/article/development', {
+                params: {
+                    articleId: articleNo,
+                },
+            });
 
-        return response.data;
+            return response.data;
+        } catch (error) {
+            return null;
+        }
     }
 }
