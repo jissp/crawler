@@ -79,7 +79,7 @@ export class ArticleTransformProcessor {
 
     @OnQueueCompleted()
     async onCompleted(job: Job<JobData>, result: any) {
-        console.log(`${NaverLandCrawlerQueueType.TransformArticle} completed`);
+        // console.log(`${NaverLandCrawlerQueueType.TransformArticle} completed`);
     }
 
     @OnQueueFailed()
