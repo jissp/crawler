@@ -75,7 +75,7 @@ export class NaverLandFinClient {
         try {
             const response = await this.client.get<
                 NaverLandResponseDto<ArticleComplexResult>
-            >('/front-api/v1/article/complex', {
+            >('/front-api/v1/complex', {
                 params: {
                     complexNumber: complexNo,
                 },
