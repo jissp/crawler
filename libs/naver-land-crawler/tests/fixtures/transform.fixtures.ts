@@ -1,7 +1,10 @@
 import { IArticle } from '@libs/naver-land-client/clients/dtos';
 import { TradeType } from '@libs/naver-land-client/interfaces/naver-land.interface';
 import { Direction } from '@libs/naver-land-client/interfaces/article.interface';
-import { ArticleComplexResult } from '@libs/naver-land-client/clients/dtos/results';
+import {
+    ArticleBasicInfoResult,
+    ArticleComplexResult,
+} from '@libs/naver-land-client/clients/dtos/results';
 
 export const transformFixtureArticle: IArticle = {
     atclNo: '2410628525',
@@ -233,4 +236,86 @@ export const transformFixtureArticleComplexResult: ArticleComplexResult = {
     },
     managementOfficeContact: '02-2682-9087',
     monopolyRestrictionType: 'N',
+};
+
+export const transformFixtureBasicInfoResult: ArticleBasicInfoResult = {
+    priceInfo: {
+        tradeType: TradeType.매매,
+        warrantyAmount: 240000000,
+        rentAmount: 0,
+        loan: 0,
+        loanCode: null,
+    },
+    detailInfo: {
+        facilityInfo: {
+            life: [],
+            security: [],
+            etc: [],
+            buildingConjunctionDateType: null,
+            buildingConjunctionDate: null,
+            approvalElapsedYear: null,
+            entranceType: null,
+            heatingAndCoolingSystemType: null,
+            heatingEnergyType: null,
+            totalParkingCount: 269,
+            parkingCountPerHousehold: 1.39,
+            structure: null,
+            householdNumber: null,
+        },
+        articleDetailInfo: {
+            articleNumber: '2411551962',
+            articleName: '디오르나인(2BL)',
+            nonComplexBuildingName: null,
+            nonComplexBuildingSubName: null,
+            articleFeatureDescription:
+                '풀옵션,2룸,집보시러오세요,사진참조,명품주상복합',
+            articleDescription:
+                '안녕하세요~\n디오르나인 분양권 매매,전세,월세 전문부동산 초이스부동산입니다.\n안심하시고 거래하실수있게 도와드리겠습니다. \n궁금하신점 바로바로 전화주세요~',
+            isAddressExposed: true,
+            isJibunAddressExposed: null,
+            isDirectTrade: false,
+            directTradeOwnerCellPhoneNumber: null,
+            buildingType: null,
+            cpId: 'hkdotcom',
+            exposureStartDate: '2024-03-10',
+            buildingUse: '업무시설',
+            buildingPrincipalUse: null,
+        },
+        movingInInfo: {
+            movingInNegotiation: false,
+            movingInDate: '2024-02-15',
+            movingInMonth: null,
+            movingInType: 'MV004',
+            contractPeriod: null,
+        },
+        verificationInfo: {
+            verificationType: 'SITE',
+            isAssociationArticle: false,
+            exposureStartDate: '2024-03-10',
+        },
+        spaceInfo: {
+            floorInfo: {
+                targetFloor: 6,
+                totalFloor: 25,
+                groundTotalFloor: 0,
+                undergroundTotalFloor: 0,
+                floorType: '10',
+                residenceType: '1',
+            },
+            roomCount: 2,
+            bathRoomCount: 1,
+            direction: 'SS',
+            duplex: false,
+            directionStandard: '거실 기준',
+        },
+        sizeInfo: {
+            supplySpace: 123.46,
+            exclusiveSpace: 49.8,
+            supplySpaceName: '123B',
+            exclusiveSpaceName: '49B',
+            floorAreaRatio: null,
+            buildingCoverageRatio: null,
+        },
+    },
+    communalComplexInfo: { complexName: '디오르나인(2BL)', dongName: '201동' },
 };

@@ -41,7 +41,14 @@ export class NaverLandTransformer {
         this._naverLandArticle.rletTpNm = this.article
             .rletTpNm as Article.RealEstateTypeName;
         this._naverLandArticle.tradTpCd = this.article.tradTpCd;
-        this._naverLandArticle.desc = this.article.atclFetrDesc;
+        if (this.basicInfoResult) {
+            const { articleFeatureDescription, articleDescription } =
+                this.basicInfoResult.detailInfo.articleDetailInfo;
+            this._naverLandArticle.summary = articleFeatureDescription;
+            this._naverLandArticle.description = articleDescription;
+        } else {
+            this._naverLandArticle.summary = this.article.atclFetrDesc;
+        }
 
         this._naverLandArticle.household =
             (this.complexResult?.totalHouseholdNumber ??
