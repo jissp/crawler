@@ -42,8 +42,8 @@ export interface ArticleBasicInfoArticleDetailInfo {
     articleName: string;
     nonComplexBuildingName: null;
     nonComplexBuildingSubName: null;
-    articleFeatureDescription: string;
-    articleDescription: null;
+    articleFeatureDescription: string | null;
+    articleDescription: string | null;
     isAddressExposed: true;
     isJibunAddressExposed: null;
     isDirectTrade: false;
