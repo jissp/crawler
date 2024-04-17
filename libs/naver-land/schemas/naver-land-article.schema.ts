@@ -205,8 +205,15 @@ export class NaverLandArticle {
 
     @Column({
         type: 'text',
+        nullable: true,
     })
-    desc?: string;
+    summary?: string | null;
+
+    @Column({
+        type: 'text',
+        nullable: true,
+    })
+    description?: string | null;
 
     @CreateDateColumn({
         type: 'timestamp',
