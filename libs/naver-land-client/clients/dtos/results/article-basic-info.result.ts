@@ -1,3 +1,5 @@
+import { TradeType } from "@libs/naver-land-client/interfaces/naver-land.interface";
+
 export class ArticleBasicInfoResult {
     priceInfo: ArticleBasicInfoPriceInfo;
     detailInfo: ArticleBasicInfoDetailInfo;
@@ -5,11 +7,14 @@ export class ArticleBasicInfoResult {
 }
 
 export interface ArticleBasicInfoPriceInfo {
-    price: number;
-    previousDeposit: number;
-    previousMonthlyRent: number;
+    tradeType: TradeType;
+    price?: number;
+    warrantyAmount?: number;
+    rentAmount?: number;
+    previousDeposit?: number;
+    previousMonthlyRent?: number;
     loan: number;
-    loanCode: string;
+    loanCode: string | null;
 }
 
 export interface ArticleBasicInfoDetailInfo {
@@ -64,7 +69,7 @@ export interface ArticleBasicInfoArticleMovingInfo {
 }
 
 export interface ArticleBasicInfoVerificationInfo {
-    verificationType: 'OWNER' | 'DOC';
+    verificationType: 'OWNER' | 'DOC' | 'SITE';
     isAssociationArticle: boolean;
     exposureStartDate: string;
 }
