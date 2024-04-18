@@ -7,6 +7,7 @@ import {
     ArticleBasicInfoResult,
     ArticleComplexResult,
 } from '@libs/naver-land-client/clients/dtos/results';
+import { numberRange, NumberRangeOption } from '@libs/utils/number-range';
 
 export class NaverLandTransformer {
     private _naverLandArticle: Partial<INaverLandArticle> = {};
@@ -27,6 +28,8 @@ export class NaverLandTransformer {
         this.buildArticleParkingInfo();
         this.buildArticleCoordinates();
         this.buildArticleTags();
+
+        this.updateNumberFieldRange(this._naverLandArticle);
 
         return this._naverLandArticle;
     }
@@ -289,5 +292,28 @@ export class NaverLandTransformer {
         naverLandArticle.region2 = coord.address.region_2depth_name;
         naverLandArticle.region3 = coord.address.region_3depth_name;
         naverLandArticle.address = coord.address.address_name;
+    }
+
+    private updateNumberFieldRange(
+        naverLandArticle: Partial<INaverLandArticle>,
+    ) {
+        const ratioOptions: NumberRangeOption = {
+            min: 0,
+            max: 999,
+            outOfRange: 0,
+        };
+
+        naverLandArticle.roomCount = numberRange(naverLandArticle.roomCount, {
+            max: 10,
+            outOfRange: 0,
+        });
+        naverLandArticle.spcRatio = numberRange(
+            naverLandArticle.parkingRatio,
+            ratioOptions,
+        );
+        naverLandArticle.parkingRatio = numberRange(
+            naverLandArticle.parkingRatio,
+            ratioOptions,
+        );
     }
 }
