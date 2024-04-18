@@ -73,7 +73,6 @@ export class NaverLandService {
             })) || new NaverLandArticle();
 
         oriArticle = Object.assign(oriArticle, naverLandArticle);
-        oriArticle.updatedAt = new Date();
 
         return this.naverLandArticleRepository.save(oriArticle);
     }
