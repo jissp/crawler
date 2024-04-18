@@ -71,7 +71,12 @@ export class ArticleTransformProcessor {
                     lng: article.lng,
                 });
 
-            transformer.buildArticleAddressBy(toArticle, addressByCoord.data);
+            if (addressByCoord) {
+                transformer.buildArticleAddressBy(
+                    toArticle,
+                    addressByCoord.data,
+                );
+            }
         }
 
         await this.naverLandService.upsert(toArticle);
