@@ -90,8 +90,12 @@ export class NaverLandTransformer {
                 this._naverLandArticle.tradTpCd,
             )
         ) {
-            this._naverLandArticle.spcPrice =
-                this.article.prc / this.article.spc2;
+            if (this.article.prc === 0 && this.article.spc2 === 0) {
+                this._naverLandArticle.spcPrice = 0;
+            } else {
+                this._naverLandArticle.spcPrice =
+                    this.article.prc / this.article.spc2;
+            }
         }
 
         if (
@@ -297,23 +301,36 @@ export class NaverLandTransformer {
     private updateNumberFieldRange(
         naverLandArticle: Partial<INaverLandArticle>,
     ) {
-        const ratioOptions: NumberRangeOption = {
-            min: 0,
-            max: 999,
-            outOfRange: 0,
+        const numberRangeOptionMap: {
+            [key in 'standard' | 'ratio']: NumberRangeOption;
+        } = {
+            standard: {
+                min: 0,
+                max: 99,
+                outOfRange: 0,
+            },
+            ratio: {
+                min: 0,
+                max: 999,
+                outOfRange: 0,
+            },
         };
 
-        naverLandArticle.roomCount = numberRange(naverLandArticle.roomCount, {
-            max: 10,
-            outOfRange: 0,
-        });
+        naverLandArticle.roomCount = numberRange(
+            naverLandArticle.roomCount,
+            numberRangeOptionMap.standard,
+        );
+        naverLandArticle.completionYear = numberRange(
+            naverLandArticle.completionYear,
+            numberRangeOptionMap.standard,
+        );
         naverLandArticle.spcRatio = numberRange(
             naverLandArticle.parkingRatio,
-            ratioOptions,
+            numberRangeOptionMap.ratio,
         );
         naverLandArticle.parkingRatio = numberRange(
             naverLandArticle.parkingRatio,
-            ratioOptions,
+            numberRangeOptionMap.ratio,
         );
     }
 }
