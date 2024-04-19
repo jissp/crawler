@@ -71,7 +71,7 @@ export class ArticleTransformProcessor {
                     lng: article.lng,
                 });
 
-            if (addressByCoord) {
+            if (addressByCoord.data) {
                 transformer.buildArticleAddressBy(
                     toArticle,
                     addressByCoord.data,
