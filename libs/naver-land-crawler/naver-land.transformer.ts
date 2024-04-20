@@ -90,11 +90,11 @@ export class NaverLandTransformer {
                 this._naverLandArticle.tradTpCd,
             )
         ) {
-            if (this.article.prc === 0 && this.article.spc2 === 0) {
-                this._naverLandArticle.spcPrice = 0;
-            } else {
+            if (this.article.spc2) {
                 this._naverLandArticle.spcPrice =
                     this.article.prc / this.article.spc2;
+            } else {
+                this._naverLandArticle.spcPrice = 0;
             }
         }
 
