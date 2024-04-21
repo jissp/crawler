@@ -90,12 +90,9 @@ export class NaverLandTransformer {
                 this._naverLandArticle.tradTpCd,
             )
         ) {
-            if (this.article.spc2) {
-                this._naverLandArticle.spcPrice =
-                    this.article.prc / this.article.spc2;
-            } else {
-                this._naverLandArticle.spcPrice = 0;
-            }
+            this._naverLandArticle.spcPrice = this.article.spc2
+                ? this.article.prc / this.article.spc2
+                : 0;
         }
 
         if (
@@ -109,10 +106,10 @@ export class NaverLandTransformer {
 
             this._naverLandArticle.transRentPrice =
                 this.article.rentPrc + transRentPrice;
-            this._naverLandArticle.spcPrice =
-                this.article.spc2 === 0
-                    ? 0
-                    : this._naverLandArticle.transRentPrice / this.article.spc2;
+
+            this._naverLandArticle.spcPrice = this.article.spc2
+                ? this._naverLandArticle.transRentPrice / this.article.spc2
+                : 0;
         }
     }
 
