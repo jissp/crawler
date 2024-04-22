@@ -65,8 +65,8 @@ export class NaverLandTransformer {
      * @private
      */
     private buildArticleRoom() {
-        this._naverLandArticle.spc1 = this.article.spc1;
-        this._naverLandArticle.spc2 = this.article.spc2;
+        this._naverLandArticle.spc1 = Number(this.article.spc1);
+        this._naverLandArticle.spc2 = Number(this.article.spc2);
         if (this.article.spc1 === 0 || this.article.spc2 === 0) {
             this._naverLandArticle.spcRatio = 0;
         } else {
@@ -90,8 +90,8 @@ export class NaverLandTransformer {
                 this._naverLandArticle.tradTpCd,
             )
         ) {
-            this._naverLandArticle.spcPrice = this.article.spc2
-                ? this.article.prc / this.article.spc2
+            this._naverLandArticle.spcPrice = this._naverLandArticle.spc2
+                ? this.article.prc / this._naverLandArticle.spc2
                 : 0;
         }
 
@@ -107,8 +107,9 @@ export class NaverLandTransformer {
             this._naverLandArticle.transRentPrice =
                 this.article.rentPrc + transRentPrice;
 
-            this._naverLandArticle.spcPrice = this.article.spc2
-                ? this._naverLandArticle.transRentPrice / this.article.spc2
+            this._naverLandArticle.spcPrice = this._naverLandArticle.spc2
+                ? this._naverLandArticle.transRentPrice /
+                  this._naverLandArticle.spc2
                 : 0;
         }
     }
